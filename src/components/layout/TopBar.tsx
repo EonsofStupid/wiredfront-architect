@@ -1,6 +1,8 @@
 
 import { Menu, PanelRightClose, PanelRightOpen, Settings, Bell, Search } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useAtomValue } from 'jotai';
+import { glassMorphismLevelAtom, neonColorAtom } from '@/atoms';
 
 interface TopBarProps {
   onMenuClick: () => void;
@@ -9,8 +11,39 @@ interface TopBarProps {
 }
 
 const TopBar = ({ onMenuClick, onRightPanelClick, rightSidebarVisible }: TopBarProps) => {
+  const glassMorphismLevel = useAtomValue(glassMorphismLevelAtom);
+  const neonColor = useAtomValue(neonColorAtom);
+
+  // Get the appropriate glass morphism class
+  const getGlassMorphismClass = () => {
+    switch (glassMorphismLevel) {
+      case 'cyber':
+        return "cyber-glassmorphism";
+      case 'enhanced':
+        return "enhanced-glassmorphism";
+      default:
+        return "glassmorphism";
+    }
+  };
+
+  // Get neon text class based on selected neon color
+  const getNeonTextClass = () => {
+    switch (neonColor) {
+      case 'purple':
+        return "neon-text-purple";
+      case 'green':
+        return "neon-text-green";
+      case 'blue':
+      default:
+        return "neon-text";
+    }
+  };
+  
   return (
-    <header className="w-full h-14 bg-topbar text-topbar-foreground glassmorphism z-50 flex items-center justify-between px-4">
+    <header className={cn(
+      "w-full h-14 bg-topbar text-topbar-foreground z-50 flex items-center justify-between px-4",
+      getGlassMorphismClass()
+    )}>
       <div className="flex items-center space-x-4">
         <button 
           onClick={onMenuClick}
@@ -19,7 +52,12 @@ const TopBar = ({ onMenuClick, onRightPanelClick, rightSidebarVisible }: TopBarP
         >
           <Menu size={20} />
         </button>
-        <div className="text-xl font-semibold text-gradient">WiredFRONT</div>
+        <div className={cn(
+          "text-xl font-semibold",
+          glassMorphismLevel === 'cyber' ? getNeonTextClass() : "text-gradient"
+        )}>
+          WiredFRONT
+        </div>
       </div>
       
       <div className="flex-1 max-w-2xl mx-4">
@@ -30,21 +68,33 @@ const TopBar = ({ onMenuClick, onRightPanelClick, rightSidebarVisible }: TopBarP
           <input
             type="text"
             placeholder="Search..."
-            className="w-full bg-white/5 border border-white/10 rounded-full py-1.5 pl-10 pr-4 text-sm focus:outline-none focus:ring-1 focus:ring-primary"
+            className={cn(
+              "w-full bg-white/5 border rounded-full py-1.5 pl-10 pr-4 text-sm focus:outline-none focus:ring-1 focus:ring-primary",
+              glassMorphismLevel === 'cyber' ? "border-white/20 neon-border" : "border-white/10"
+            )}
           />
         </div>
       </div>
       
       <div className="flex items-center space-x-2">
-        <button className="p-2 rounded-full hover:bg-white/10 transition-colors">
+        <button className={cn(
+          "p-2 rounded-full hover:bg-white/10 transition-colors",
+          glassMorphismLevel === 'cyber' && "neon-border"
+        )}>
           <Bell size={20} />
         </button>
-        <button className="p-2 rounded-full hover:bg-white/10 transition-colors">
+        <button className={cn(
+          "p-2 rounded-full hover:bg-white/10 transition-colors",
+          glassMorphismLevel === 'cyber' && "neon-border"
+        )}>
           <Settings size={20} />
         </button>
         <button 
           onClick={onRightPanelClick}
-          className="p-2 rounded-full hover:bg-white/10 transition-colors"
+          className={cn(
+            "p-2 rounded-full hover:bg-white/10 transition-colors",
+            glassMorphismLevel === 'cyber' && "neon-border"
+          )}
           aria-label={rightSidebarVisible ? "Hide panel" : "Show panel"}
         >
           {rightSidebarVisible ? <PanelRightClose size={20} /> : <PanelRightOpen size={20} />}
