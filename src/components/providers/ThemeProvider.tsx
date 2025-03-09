@@ -5,28 +5,24 @@ import { activeThemeAtom, userThemeModeAtom } from '@/atoms';
 import ThemeErrorBoundary from './ThemeErrorBoundary';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/components/ui/use-toast';
-import { Theme, ThemeConfig, ThemeStatus } from '@/types/theme';
-import { useSubscription } from '@/hooks/useSubscription';
 
 // Theme context for components that need theme info but don't want to use jotai directly
-export type ThemeContextType = {
-  theme: {
-    mode: 'light' | 'dark' | 'system';
-    glassMorphismLevel: 'default' | 'enhanced' | 'cyber';
-    sidebarStyle: 'glass' | 'solid' | 'circuit' | 'matrix';
-    neonColor: 'blue' | 'purple' | 'green' | 'pink' | 'yellow';
-    accentColor: 'cyberpunk' | 'toxic' | 'neon';
-    name?: string;
-    cssVars?: Record<string, string>;
-  };
+export type Theme = {
+  mode: 'light' | 'dark' | 'system';
+  glassMorphismLevel: 'default' | 'enhanced' | 'cyber';
+  sidebarStyle: 'glass' | 'solid' | 'circuit' | 'matrix';
+  neonColor: 'blue' | 'purple' | 'green' | 'pink' | 'yellow';
+  accentColor: 'cyberpunk' | 'toxic' | 'neon';
+  name?: string;
+  cssVars?: Record<string, string>;
+};
+
+// Theme context type
+type ThemeContextType = {
+  theme: Theme;
   themeError: Error | null;
   isLoading: boolean;
   dynamicColors: Record<string, string>;
-  activeTheme: Theme | null;
-  themeStatus: ThemeStatus | null;
-  themeVersion: number | null;
-  validationStatus: boolean;
-  refreshTheme: () => Promise<void>;
 };
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
@@ -44,79 +40,43 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const userThemeMode = useAtomValue(userThemeModeAtom);
   const [themeError, setThemeError] = useState<Error | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [dynamicTheme, setDynamicTheme] = useState<ThemeConfig | null>(null);
+  const [dynamicTheme, setDynamicTheme] = useState<any>(null);
   const [dynamicColors, setDynamicColors] = useState<Record<string, string>>({});
-  const [dbTheme, setDbTheme] = useState<Theme | null>(null);
 
-  // Function to fetch theme from database
-  const fetchTheme = async () => {
-    try {
-      setIsLoading(true);
-      // Get the default theme from Supabase
-      const { data, error } = await supabase
-        .from('themes')
-        .select('*')
-        .eq('is_default', true)
-        .eq('status', 'active')
-        .single();
+  // Fetch theme from database
+  useEffect(() => {
+    const fetchTheme = async () => {
+      try {
+        setIsLoading(true);
+        // Get the default theme from Supabase
+        const { data, error } = await supabase
+          .from('themes')
+          .select('*')
+          .eq('is_default', true)
+          .single();
 
-      if (error) throw error;
-      if (data) {
-        setDbTheme(data);
-        setDynamicTheme(data.theme_config);
-        
-        // Extract colors from theme config
-        if (data.theme_config.colors) {
-          setDynamicColors(data.theme_config.colors);
-        }
-      }
-    } catch (error) {
-      console.error("Error fetching theme:", error);
-      setThemeError(error instanceof Error ? error : new Error('Failed to load theme'));
-      toast({
-        title: "Theme Error",
-        description: "Failed to load theme from database. Using fallback theme.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // Subscribe to theme changes using Supabase realtime
-  useSubscription(
-    supabase
-      .channel('theme-changes')
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'themes',
-          filter: dbTheme ? `id=eq.${dbTheme.id}` : undefined,
-        },
-        (payload) => {
-          console.log('Theme changed:', payload);
-          if (payload.new) {
-            setDbTheme(payload.new as Theme);
-            setDynamicTheme((payload.new as Theme).theme_config);
-            
-            if ((payload.new as Theme).theme_config.colors) {
-              setDynamicColors((payload.new as Theme).theme_config.colors);
-            }
-            
-            toast({
-              title: "Theme Updated",
-              description: "The system theme has been updated.",
-            });
+        if (error) throw error;
+        if (data) {
+          setDynamicTheme(data.theme_config);
+          
+          // Extract colors from theme config
+          if (data.theme_config.colors) {
+            setDynamicColors(data.theme_config.colors);
           }
         }
-      )
-      .subscribe()
-  );
+      } catch (error) {
+        console.error("Error fetching theme:", error);
+        setThemeError(error instanceof Error ? error : new Error('Failed to load theme'));
+        toast({
+          title: "Theme Error",
+          description: "Failed to load theme from database. Using fallback theme.",
+          variant: "destructive",
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-  // Initial fetch
-  useEffect(() => {
     fetchTheme();
   }, []);
 
@@ -202,14 +162,14 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     }
   }, [activeTheme, userThemeMode]);
 
-  const theme = {
+  const theme: Theme = {
     mode: userThemeMode,
     glassMorphismLevel: activeTheme.glassMorphismLevel,
     sidebarStyle: activeTheme.sidebarStyle,
     neonColor: activeTheme.neonColor,
     accentColor: activeTheme.accentColor,
-    name: dbTheme ? dbTheme.name : 'WFPulse',
-    cssVars: dynamicTheme || undefined
+    name: dynamicTheme?.name || 'WFPulse',
+    cssVars: dynamicTheme
   };
 
   return (
@@ -218,12 +178,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
         theme,
         themeError,
         isLoading,
-        dynamicColors,
-        activeTheme: dbTheme,
-        themeStatus: dbTheme?.status || null,
-        themeVersion: dbTheme?.version || null,
-        validationStatus: dbTheme?.validation_status?.is_valid || false,
-        refreshTheme: fetchTheme
+        dynamicColors
       }}>
         {children}
       </ThemeContext.Provider>
