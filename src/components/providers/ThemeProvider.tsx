@@ -1,32 +1,15 @@
 
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect } from 'react';
 import { useAtomValue } from 'jotai';
 import { activeThemeAtom, userThemeModeAtom } from '@/atoms';
-import ThemeErrorBoundary from './ThemeErrorBoundary';
-import { supabase } from '@/integrations/supabase/client';
-import { toast } from '@/components/ui/use-toast';
-import { Theme, ThemeConfig, ThemeStatus } from '@/types/theme';
-import { useSubscription } from '@/hooks/useSubscription';
 
 // Theme context for components that need theme info but don't want to use jotai directly
-export type ThemeContextType = {
-  theme: {
-    mode: 'light' | 'dark' | 'system';
-    glassMorphismLevel: 'default' | 'enhanced' | 'cyber';
-    sidebarStyle: 'glass' | 'solid' | 'circuit' | 'matrix';
-    neonColor: 'blue' | 'purple' | 'green' | 'pink' | 'yellow';
-    accentColor: 'cyberpunk' | 'toxic' | 'neon';
-    name?: string;
-    cssVars?: Record<string, string>;
-  };
-  themeError: Error | null;
-  isLoading: boolean;
-  dynamicColors: Record<string, string>;
-  activeTheme: Theme | null;
-  themeStatus: ThemeStatus | null;
-  themeVersion: number | null;
-  validationStatus: boolean;
-  refreshTheme: () => Promise<void>;
+type ThemeContextType = {
+  mode: 'light' | 'dark' | 'system';
+  glassMorphismLevel: 'default' | 'enhanced' | 'cyber';
+  sidebarStyle: 'glass' | 'solid' | 'circuit' | 'matrix';
+  neonColor: 'blue' | 'purple' | 'green' | 'pink' | 'yellow';
+  accentColor: 'cyberpunk' | 'toxic' | 'neon';
 };
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
@@ -42,133 +25,6 @@ export function useAppTheme() {
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const activeTheme = useAtomValue(activeThemeAtom);
   const userThemeMode = useAtomValue(userThemeModeAtom);
-  const [themeError, setThemeError] = useState<Error | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [dynamicTheme, setDynamicTheme] = useState<ThemeConfig | null>(null);
-  const [dynamicColors, setDynamicColors] = useState<Record<string, string>>({});
-  const [dbTheme, setDbTheme] = useState<Theme | null>(null);
-
-  // Function to fetch theme from database
-  const fetchTheme = async () => {
-    try {
-      setIsLoading(true);
-      // Get the default theme from Supabase
-      const { data, error } = await supabase
-        .from('themes')
-        .select('*')
-        .eq('is_default', true)
-        .eq('status', 'active')
-        .single();
-
-      if (error) throw error;
-      if (data) {
-        setDbTheme(data);
-        setDynamicTheme(data.theme_config);
-        
-        // Extract colors from theme config
-        if (data.theme_config.colors) {
-          setDynamicColors(data.theme_config.colors);
-        }
-      }
-    } catch (error) {
-      console.error("Error fetching theme:", error);
-      setThemeError(error instanceof Error ? error : new Error('Failed to load theme'));
-      toast({
-        title: "Theme Error",
-        description: "Failed to load theme from database. Using fallback theme.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // Subscribe to theme changes using Supabase realtime
-  useSubscription(
-    supabase
-      .channel('theme-changes')
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'themes',
-          filter: dbTheme ? `id=eq.${dbTheme.id}` : undefined,
-        },
-        (payload) => {
-          console.log('Theme changed:', payload);
-          if (payload.new) {
-            setDbTheme(payload.new as Theme);
-            setDynamicTheme((payload.new as Theme).theme_config);
-            
-            if ((payload.new as Theme).theme_config.colors) {
-              setDynamicColors((payload.new as Theme).theme_config.colors);
-            }
-            
-            toast({
-              title: "Theme Updated",
-              description: "The system theme has been updated.",
-            });
-          }
-        }
-      )
-      .subscribe()
-  );
-
-  // Initial fetch
-  useEffect(() => {
-    fetchTheme();
-  }, []);
-
-  // Apply CSS variables from dynamic theme
-  useEffect(() => {
-    if (!dynamicTheme) return;
-    
-    try {
-      const root = document.documentElement;
-      
-      // Apply colors
-      if (dynamicTheme.colors) {
-        Object.entries(dynamicTheme.colors).forEach(([key, value]) => {
-          root.style.setProperty(`--${key}`, value as string);
-        });
-      }
-      
-      // Apply effects
-      if (dynamicTheme.effects) {
-        // Glass effects
-        if (dynamicTheme.effects.glass) {
-          Object.entries(dynamicTheme.effects.glass).forEach(([key, value]) => {
-            root.style.setProperty(`--glass-${key}`, value as string);
-          });
-        }
-        
-        // Cyber effects
-        if (dynamicTheme.effects.cyber) {
-          Object.entries(dynamicTheme.effects.cyber).forEach(([key, value]) => {
-            root.style.setProperty(`--cyber-${key}`, value as string);
-          });
-        }
-        
-        // Scientist effects
-        if (dynamicTheme.effects.scientist) {
-          Object.entries(dynamicTheme.effects.scientist).forEach(([key, value]) => {
-            root.style.setProperty(`--scientist-${key}`, value as string);
-          });
-        }
-      }
-      
-      // Apply animations
-      if (dynamicTheme.animations) {
-        Object.entries(dynamicTheme.animations).forEach(([key, value]) => {
-          root.style.setProperty(`--animation-${key}`, value as string);
-        });
-      }
-    } catch (error) {
-      console.error("Error applying dynamic theme:", error);
-      setThemeError(error instanceof Error ? error : new Error('Failed to apply theme'));
-    }
-  }, [dynamicTheme]);
 
   // Apply theme classes to the document element
   useEffect(() => {
@@ -202,32 +58,16 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     }
   }, [activeTheme, userThemeMode]);
 
-  const theme = {
-    mode: userThemeMode,
-    glassMorphismLevel: activeTheme.glassMorphismLevel,
-    sidebarStyle: activeTheme.sidebarStyle,
-    neonColor: activeTheme.neonColor,
-    accentColor: activeTheme.accentColor,
-    name: dbTheme ? dbTheme.name : 'WFPulse',
-    cssVars: dynamicTheme || undefined
-  };
-
   return (
-    <ThemeErrorBoundary>
-      <ThemeContext.Provider value={{ 
-        theme,
-        themeError,
-        isLoading,
-        dynamicColors,
-        activeTheme: dbTheme,
-        themeStatus: dbTheme?.status || null,
-        themeVersion: dbTheme?.version || null,
-        validationStatus: dbTheme?.validation_status?.is_valid || false,
-        refreshTheme: fetchTheme
-      }}>
-        {children}
-      </ThemeContext.Provider>
-    </ThemeErrorBoundary>
+    <ThemeContext.Provider value={{ 
+      mode: userThemeMode,
+      glassMorphismLevel: activeTheme.glassMorphismLevel,
+      sidebarStyle: activeTheme.sidebarStyle,
+      neonColor: activeTheme.neonColor,
+      accentColor: activeTheme.accentColor,
+    }}>
+      {children}
+    </ThemeContext.Provider>
   );
 }
 
