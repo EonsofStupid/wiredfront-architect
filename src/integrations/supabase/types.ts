@@ -844,6 +844,150 @@ export type Database = {
         }
         Relationships: []
       }
+      theme_audit_logs: {
+        Row: {
+          action: string
+          created_at: string
+          id: string
+          metadata: Json | null
+          new_state: Json | null
+          previous_state: Json | null
+          theme_id: string
+          user_id: string | null
+        }
+        Insert: {
+          action: string
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          new_state?: Json | null
+          previous_state?: Json | null
+          theme_id: string
+          user_id?: string | null
+        }
+        Update: {
+          action?: string
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          new_state?: Json | null
+          previous_state?: Json | null
+          theme_id?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "theme_audit_logs_theme_id_fkey"
+            columns: ["theme_id"]
+            isOneToOne: false
+            referencedRelation: "themes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      theme_versions: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          id: string
+          is_active: boolean
+          notes: string | null
+          status: Database["public"]["Enums"]["theme_status"]
+          theme_config: Json
+          theme_id: string
+          version: number
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_active?: boolean
+          notes?: string | null
+          status?: Database["public"]["Enums"]["theme_status"]
+          theme_config: Json
+          theme_id: string
+          version: number
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_active?: boolean
+          notes?: string | null
+          status?: Database["public"]["Enums"]["theme_status"]
+          theme_config?: Json
+          theme_id?: string
+          version?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "theme_versions_theme_id_fkey"
+            columns: ["theme_id"]
+            isOneToOne: false
+            referencedRelation: "themes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      themes: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          id: string
+          is_default: boolean | null
+          is_public: boolean
+          name: string
+          parent_theme_id: string | null
+          preview_image: string | null
+          status: Database["public"]["Enums"]["theme_status"]
+          theme_config: Json
+          updated_at: string | null
+          validation_status: Json | null
+          version: number
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          is_default?: boolean | null
+          is_public?: boolean
+          name: string
+          parent_theme_id?: string | null
+          preview_image?: string | null
+          status?: Database["public"]["Enums"]["theme_status"]
+          theme_config: Json
+          updated_at?: string | null
+          validation_status?: Json | null
+          version?: number
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          is_default?: boolean | null
+          is_public?: boolean
+          name?: string
+          parent_theme_id?: string | null
+          preview_image?: string | null
+          status?: Database["public"]["Enums"]["theme_status"]
+          theme_config?: Json
+          updated_at?: string | null
+          validation_status?: Json | null
+          version?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "themes_parent_theme_id_fkey"
+            columns: ["parent_theme_id"]
+            isOneToOne: false
+            referencedRelation: "themes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       training_examples: {
         Row: {
           context: Json | null
@@ -980,6 +1124,35 @@ export type Database = {
         }
         Relationships: []
       }
+      user_theme_preferences: {
+        Row: {
+          mode: string
+          theme_id: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          mode?: string
+          theme_id?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          mode?: string
+          theme_id?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_theme_preferences_theme_id_fkey"
+            columns: ["theme_id"]
+            isOneToOne: false
+            referencedRelation: "themes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -995,6 +1168,13 @@ export type Database = {
           p_is_default?: boolean
         }
         Returns: string
+      }
+      apply_theme_version: {
+        Args: {
+          p_theme_id: string
+          p_version?: number
+        }
+        Returns: Json
       }
       auto_save_prompt_template: {
         Args: {
@@ -1071,6 +1251,12 @@ export type Database = {
           avg_response_time: number
           success_rate: number
         }[]
+      }
+      get_default_theme_id: {
+        Args: {
+          p_role?: string
+        }
+        Returns: string
       }
       get_discord_config: {
         Args: Record<PropertyKey, never>
@@ -1476,6 +1662,12 @@ export type Database = {
         }
         Returns: Json
       }
+      validate_theme_config: {
+        Args: {
+          theme_config: Json
+        }
+        Returns: Json
+      }
       vector_avg: {
         Args: {
           "": number[]
@@ -1553,6 +1745,7 @@ export type Database = {
         | "palm"
         | "bedrock"
         | "ollama"
+      theme_status: "active" | "draft" | "archived" | "pending_approval"
     }
     CompositeTypes: {
       [_ in never]: never

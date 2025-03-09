@@ -1,51 +1,66 @@
 
-import { useLayoutState } from '@/hooks';
+import React, { useState, useEffect } from 'react';
+import { useAtom } from 'jotai';
+import { leftSidebarCollapsedAtom, rightSidebarVisibleAtom } from '@/atoms';
 import TopBar from './TopBar';
 import LeftSidebar from './LeftSidebar';
 import RightSidebar from './RightSidebar';
 import BottomBar from './BottomBar';
-import { cn } from '@/lib/utils';
+import { setupRandomHoverEffects, setupCyberBackgrounds } from '@/lib/animations';
 
 interface MainLayoutProps {
   children: React.ReactNode;
 }
 
 const MainLayout = ({ children }: MainLayoutProps) => {
-  const { 
-    leftSidebarCollapsed, 
-    rightSidebarVisible, 
-    toggleLeftSidebar, 
-    toggleRightSidebar 
-  } = useLayoutState();
+  const [leftSidebarCollapsed, setLeftSidebarCollapsed] = useAtom(leftSidebarCollapsedAtom);
+  const [rightSidebarVisible, setRightSidebarVisible] = useAtom(rightSidebarVisibleAtom);
+
+  const toggleLeftSidebar = () => {
+    setLeftSidebarCollapsed(!leftSidebarCollapsed);
+  };
+
+  const toggleRightSidebar = () => {
+    setRightSidebarVisible(!rightSidebarVisible);
+  };
+
+  // Setup animations when component mounts
+  useEffect(() => {
+    setupRandomHoverEffects();
+    setupCyberBackgrounds();
+    
+    // Re-apply when theme or layout changes
+    const observer = new MutationObserver(() => {
+      setupRandomHoverEffects();
+      setupCyberBackgrounds();
+    });
+    
+    observer.observe(document.documentElement, { 
+      attributes: true, 
+      attributeFilter: ['class', 'data-theme'] 
+    });
+    
+    return () => observer.disconnect();
+  }, []);
 
   return (
-    <div className="flex flex-col h-screen w-screen overflow-hidden bg-background">
-      {/* Top Bar */}
+    <div className="flex flex-col h-screen overflow-hidden">
       <TopBar 
-        onMenuClick={toggleLeftSidebar}
+        onMenuClick={toggleLeftSidebar} 
         onRightPanelClick={toggleRightSidebar}
         rightSidebarVisible={rightSidebarVisible}
       />
       
       <div className="flex flex-1 overflow-hidden">
-        {/* Left Sidebar */}
         <LeftSidebar collapsed={leftSidebarCollapsed} />
         
-        {/* Main Content */}
-        <main className={cn(
-          "flex-1 transition-all duration-300 ease-in-out",
-          "bg-content overflow-hidden flex flex-col relative",
-        )}>
-          <div className="flex-1 overflow-y-auto custom-scrollbar px-4 py-6">
-            {children}
-          </div>
+        <main className="flex-1 overflow-auto bg-content text-content-foreground">
+          {children}
         </main>
         
-        {/* Right Sidebar */}
         <RightSidebar visible={rightSidebarVisible} />
       </div>
       
-      {/* Bottom Bar */}
       <BottomBar />
     </div>
   );

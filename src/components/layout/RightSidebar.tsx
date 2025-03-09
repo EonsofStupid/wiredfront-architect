@@ -1,5 +1,5 @@
 
-import { Info, Users, FileText, Settings, X } from 'lucide-react';
+import { Info, Users, FileText, Settings } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAtomValue } from 'jotai';
 import { glassMorphismLevelAtom, neonColorAtom, sidebarStyleAtom } from '@/atoms';
@@ -59,7 +59,8 @@ const RightSidebar = ({ visible }: RightSidebarProps) => {
         "h-full bg-rightbar text-rightbar-foreground border-l border-sidebar-border transition-all duration-300 ease-in-out",
         getGlassMorphismClass(),
         getBackgroundPattern(),
-        visible ? "w-80" : "w-0 overflow-hidden"
+        visible ? "w-80" : "w-0 overflow-hidden",
+        "apple-glass cyber-background-animation" // Added Apple-inspired depth and animations
       )}
     >
       {visible && (
@@ -78,7 +79,7 @@ const RightSidebar = ({ visible }: RightSidebarProps) => {
                   <Info size={14} className="mr-2" /> Project Overview
                 </div>
                 <div className={cn(
-                  "bg-white/5 rounded-lg p-3",
+                  "bg-white/5 rounded-lg p-3 hover-random-effect transition-all duration-300",
                   glassMorphismLevel === 'cyber' && getNeonBorderClass()
                 )}>
                   <h4 className="font-medium text-sm mb-1">WiredFRONT</h4>
@@ -93,7 +94,7 @@ const RightSidebar = ({ visible }: RightSidebarProps) => {
                   <Users size={14} className="mr-2" /> Team
                 </div>
                 <div className={cn(
-                  "bg-white/5 rounded-lg p-3",
+                  "bg-white/5 rounded-lg p-3 hover-random-effect transition-all duration-300",
                   glassMorphismLevel === 'cyber' && getNeonBorderClass()
                 )}>
                   <div className="flex items-center">
@@ -111,7 +112,7 @@ const RightSidebar = ({ visible }: RightSidebarProps) => {
                   <FileText size={14} className="mr-2" /> Documentation
                 </div>
                 <div className={cn(
-                  "bg-white/5 rounded-lg p-3 text-xs",
+                  "bg-white/5 rounded-lg p-3 text-xs hover-random-effect transition-all duration-300",
                   glassMorphismLevel === 'cyber' && getNeonBorderClass()
                 )}>
                   <div className="flex items-center justify-between">
@@ -126,7 +127,7 @@ const RightSidebar = ({ visible }: RightSidebarProps) => {
                   <Settings size={14} className="mr-2" /> Configuration
                 </div>
                 <div className={cn(
-                  "bg-white/5 rounded-lg p-3 text-xs",
+                  "bg-white/5 rounded-lg p-3 text-xs hover-random-effect transition-all duration-300",
                   glassMorphismLevel === 'cyber' && getNeonBorderClass()
                 )}>
                   <div className="flex items-center justify-between">

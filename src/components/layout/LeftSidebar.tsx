@@ -3,6 +3,7 @@ import { Home, Layers, Code, Image, MessageCircle, FileText, PlusCircle } from '
 import { cn } from '@/lib/utils';
 import { useAtomValue } from 'jotai';
 import { sidebarStyleAtom, neonColorAtom, glassMorphismLevelAtom } from '@/atoms';
+import { Link } from 'react-router-dom';
 
 interface LeftSidebarProps {
   collapsed: boolean;
@@ -14,16 +15,16 @@ const LeftSidebar = ({ collapsed }: LeftSidebarProps) => {
   const glassMorphismLevel = useAtomValue(glassMorphismLevelAtom);
   
   const sidebarItems = [
-    { icon: Home, label: 'Dashboard', active: true },
-    { icon: Code, label: 'Developer' },
-    { icon: MessageCircle, label: 'AI Chat' },
-    { icon: Layers, label: 'Projects' },
-    { icon: Image, label: 'Gallery' },
-    { icon: FileText, label: 'Documents' },
+    { icon: Home, label: 'Dashboard', active: true, path: '/' },
+    { icon: Code, label: 'Developer', path: '/developer' },
+    { icon: MessageCircle, label: 'AI Chat', path: '/chat' },
+    { icon: Layers, label: 'Projects', path: '/projects' },
+    { icon: Image, label: 'Gallery', path: '/gallery' },
+    { icon: FileText, label: 'Documents', path: '/documents' },
   ];
 
   const getSidebarClass = () => {
-    const baseClasses = "bg-sidebar text-sidebar-foreground h-full border-r border-sidebar-border transition-all duration-300 ease-in-out";
+    const baseClasses = "bg-sidebar text-sidebar-foreground h-full border-r border-sidebar-border transition-all duration-300 ease-in-out cyber-background-animation";
 
     // Glass morphism style variations
     if (glassMorphismLevel === 'cyber') {
@@ -81,18 +82,20 @@ const LeftSidebar = ({ collapsed }: LeftSidebarProps) => {
       className={cn(
         getSidebarClass(),
         getBackgroundPattern(),
-        collapsed ? "w-16" : "w-64"
+        collapsed ? "w-16" : "w-64",
+        "apple-glass" // Added Apple-inspired depth
       )}
     >
       <div className="h-full flex flex-col py-4">
         <div className="flex-1 overflow-y-auto cyber-scrollbar">
           <nav className="px-2 space-y-2">
             {sidebarItems.map((item, index) => (
-              <button
+              <Link
                 key={index}
+                to={item.path}
                 className={cn(
                   "w-full flex items-center rounded-lg py-2 px-3 transition-colors",
-                  "hover:bg-sidebar-accent group relative overflow-hidden",
+                  "hover:bg-sidebar-accent group relative overflow-hidden hover-random-effect",
                   item.active ? "bg-sidebar-accent" : "text-sidebar-foreground"
                 )}
               >
@@ -117,7 +120,7 @@ const LeftSidebar = ({ collapsed }: LeftSidebarProps) => {
                     getNeonBorderClass()
                   )}></div>
                 )}
-              </button>
+              </Link>
             ))}
           </nav>
         </div>
@@ -127,7 +130,7 @@ const LeftSidebar = ({ collapsed }: LeftSidebarProps) => {
             className={cn(
               "w-full flex items-center justify-center rounded-lg py-2 px-3",
               "bg-sidebar-primary/10 hover:bg-sidebar-primary/20 transition-colors",
-              "border border-sidebar-primary/20 enhanced-glowing-border"
+              "border border-sidebar-primary/20 enhanced-glowing-border hover-random-effect"
             )}
           >
             <PlusCircle size={18} className="text-sidebar-primary" />

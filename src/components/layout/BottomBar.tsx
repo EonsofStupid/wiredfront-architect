@@ -37,17 +37,18 @@ const BottomBar = () => {
   return (
     <footer className={cn(
       "w-full h-8 bg-bottombar text-bottombar-foreground flex items-center justify-between px-4 border-t border-white/10 text-xs",
-      getGlassMorphismClass()
+      getGlassMorphismClass(),
+      "apple-glass cyber-background-animation" // Added Apple-inspired depth and animations
     )}>
       <div className="flex items-center space-x-4">
-        <div className="flex items-center">
+        <div className="flex items-center hover-random-effect px-2 py-0.5 rounded">
           <CheckCircle size={12} className={cn(
             "mr-1",
             glassMorphismLevel === 'cyber' ? "text-neon-green" : "text-green-400"
           )} />
           <span className={glassMorphismLevel === 'cyber' ? getNeonTextClass() : ""}>Ready</span>
         </div>
-        <div className="flex items-center">
+        <div className="flex items-center hover-random-effect px-2 py-0.5 rounded">
           <Terminal size={12} className="mr-1" />
           <span>Terminal</span>
         </div>
