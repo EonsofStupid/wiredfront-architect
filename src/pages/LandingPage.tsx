@@ -1,9 +1,9 @@
-
 import { Button } from "@/components/ui/button";
 import { Link } from "@tanstack/react-router";
 import { Shield, Zap, Code, Users } from 'lucide-react';
 import { useAtomValue } from 'jotai';
 import { glassMorphismLevelAtom } from '@/atoms';
+import MainLayout from '@/components/layout/MainLayout';
 
 const LandingPage = () => {
   const glassMorphismLevel = useAtomValue(glassMorphismLevelAtom);
@@ -21,34 +21,35 @@ const LandingPage = () => {
   };
 
   return (
-    <div className="w-full min-h-[calc(100vh-8rem)] flex flex-col items-center justify-center px-4 py-12 animate-fade-in">
-      <div className="max-w-5xl mx-auto text-center mb-12">
-        <h1 className="text-4xl md:text-6xl font-bold mb-6 cyber-text">
-          <span className="text-gradient">WiredFRONT</span>
-        </h1>
-        <p className="text-xl md:text-2xl mb-8 text-foreground/80">
-          The AI-powered development platform for the future
-        </p>
-        
-        <div className="flex flex-wrap gap-4 justify-center mb-12">
-          <Button 
-            size="lg" 
-            className="cyber-button"
-            asChild
-          >
-            <Link to="/user/overview">Get Started</Link>
-          </Button>
-          <Button 
-            size="lg" 
-            variant="outline" 
-            className="enhanced-glowing-border"
-          >
-            Learn More
-          </Button>
+    <MainLayout>
+      <div className="w-full min-h-[calc(100vh-8rem)] flex flex-col items-center justify-center px-4 py-12 animate-fade-in">
+        <div className="max-w-5xl mx-auto text-center mb-12">
+          <h1 className="text-4xl md:text-6xl font-bold mb-6 cyber-text">
+            <span className="text-gradient">WiredFRONT</span>
+          </h1>
+          <p className="text-xl md:text-2xl mb-8 text-foreground/80">
+            The AI-powered development platform for the future
+          </p>
+          
+          <div className="flex flex-wrap gap-4 justify-center mb-12">
+            <Button 
+              size="lg" 
+              className="cyber-button"
+              asChild
+            >
+              <Link to="/user/overview">Get Started</Link>
+            </Button>
+            <Button 
+              size="lg" 
+              variant="outline" 
+              className="enhanced-glowing-border"
+            >
+              Learn More
+            </Button>
+          </div>
         </div>
-      </div>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 w-full max-w-5xl">
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 w-full max-w-5xl">
         {[
           {
             title: "AI Assistance",
@@ -85,7 +86,8 @@ const LandingPage = () => {
           </div>
         ))}
       </div>
-    </div>
+      </div>
+    </MainLayout>
   );
 };
 

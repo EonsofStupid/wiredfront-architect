@@ -10,5 +10,7 @@ export interface RouterContext {
 
 // Create the root route with proper context typing
 export const rootRoute = createRootRoute<RouterContext>({
-  component: () => <Outlet />,
+  component: () => (
+    <Outlet />
+  ),
 });
