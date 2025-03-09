@@ -1,0 +1,48 @@
+
+/* Custom Scrollbar Styles */
+@layer components {
+  .scrollbar-none {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+
+  .custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--primary)) transparent;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    @apply bg-transparent rounded-full;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-primary/50 rounded-full hover:bg-primary transition-colors;
+  }
+
+  .cyber-scrollbar::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  .cyber-scrollbar::-webkit-scrollbar-track {
+    @apply bg-black/30 rounded-full;
+  }
+
+  .cyber-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-gradient-to-b from-neon-blue to-neon-purple rounded-full;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .cyber-scrollbar::-webkit-scrollbar-thumb:hover {
+    @apply bg-gradient-to-b from-neon-purple to-neon-blue;
+  }
+}
