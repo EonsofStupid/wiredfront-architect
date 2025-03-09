@@ -7,7 +7,7 @@ import { Route as userOverviewRoute } from './routes/user/overview';
 import { Route as adminDashboardRoute } from './routes/admin/dashboard';
 import { Route as notFoundRoute } from './routes/not-found';
 
-// Create the route tree
+// Create the route tree with proper typing
 export const routeTree = rootRoute.addChildren([
   indexRoute,
   userOverviewRoute,

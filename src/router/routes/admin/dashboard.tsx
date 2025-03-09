@@ -8,5 +8,5 @@ export const Route = createFileRoute('/admin/dashboard')({
     <MainLayout>
       <AdminDashboard />
     </MainLayout>
-  ),
+  )
 });

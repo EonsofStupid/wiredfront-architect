@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { Link } from "@tanstack/react-router";
 import { Shield, Zap, Code, Users } from 'lucide-react';
@@ -9,12 +10,12 @@ const LandingPage = () => {
   
   const getGlassMorphismClass = () => {
     switch(glassMorphismLevel) {
-      case 'high':
-        return 'glassmorphism-high';
-      case 'medium':
-        return 'glassmorphism-medium';
-      case 'low':
+      case 'default':
         return 'glassmorphism-low';
+      case 'enhanced':
+        return 'glassmorphism-medium';
+      case 'cyber':
+        return 'glassmorphism-high';
       default:
         return 'glassmorphism-medium';
     }

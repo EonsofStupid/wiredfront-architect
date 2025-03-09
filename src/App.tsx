@@ -23,7 +23,7 @@ const App = () => (
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <RouterProvider router={router} context={{ queryClient }} />
+        <RouterProvider router={router} />
       </TooltipProvider>
     </JotaiProvider>
   </QueryClientProvider>

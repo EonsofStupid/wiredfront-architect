@@ -8,5 +8,5 @@ export const Route = createFileRoute('/user/overview')({
     <MainLayout>
       <UserOverview />
     </MainLayout>
-  ),
+  )
 });
