@@ -1,6 +1,5 @@
 
-import { useState } from 'react';
-import { Menu, PanelRightClose, PanelRightOpen } from 'lucide-react';
+import { useLayoutState } from '@/hooks';
 import TopBar from './TopBar';
 import LeftSidebar from './LeftSidebar';
 import RightSidebar from './RightSidebar';
@@ -12,16 +11,12 @@ interface MainLayoutProps {
 }
 
 const MainLayout = ({ children }: MainLayoutProps) => {
-  const [leftSidebarCollapsed, setLeftSidebarCollapsed] = useState(false);
-  const [rightSidebarVisible, setRightSidebarVisible] = useState(true);
-
-  const toggleLeftSidebar = () => {
-    setLeftSidebarCollapsed(!leftSidebarCollapsed);
-  };
-
-  const toggleRightSidebar = () => {
-    setRightSidebarVisible(!rightSidebarVisible);
-  };
+  const { 
+    leftSidebarCollapsed, 
+    rightSidebarVisible, 
+    toggleLeftSidebar, 
+    toggleRightSidebar 
+  } = useLayoutState();
 
   return (
     <div className="flex flex-col h-screen w-screen overflow-hidden bg-background">

@@ -1,6 +1,7 @@
 
-import { Terminal, CheckCircle, AlertCircle } from 'lucide-react';
+import { Terminal, CheckCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { APP_VERSION } from '@/constants';
 
 const BottomBar = () => {
   return (
@@ -17,7 +18,7 @@ const BottomBar = () => {
       </div>
       
       <div className="flex items-center space-x-2">
-        <span className="text-bottombar-foreground/70">v1.0.0</span>
+        <span className="text-bottombar-foreground/70">{APP_VERSION}</span>
       </div>
     </footer>
   );
