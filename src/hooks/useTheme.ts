@@ -4,7 +4,11 @@ import {
   glassMorphismLevelAtom, 
   sidebarStyleAtom, 
   neonColorAtom, 
-  accentColorAtom 
+  accentColorAtom,
+  userThemeModeAtom,
+  isAdminThemeEditModeAtom,
+  adminThemeConfigAtom,
+  activeThemeAtom
 } from '@/atoms';
 
 export function useTheme() {
@@ -12,8 +16,13 @@ export function useTheme() {
   const [sidebarStyle, setSidebarStyle] = useAtom(sidebarStyleAtom);
   const [neonColor, setNeonColor] = useAtom(neonColorAtom);
   const [accentColor, setAccentColor] = useAtom(accentColorAtom);
+  const [userThemeMode, setUserThemeMode] = useAtom(userThemeModeAtom);
+  const [isAdminEditMode, setIsAdminEditMode] = useAtom(isAdminThemeEditModeAtom);
+  const [adminThemeConfig] = useAtom(adminThemeConfigAtom);
+  const [activeTheme] = useAtom(activeThemeAtom);
 
-  const setTheme = (theme: {
+  // For admin use only
+  const setAdminTheme = (theme: {
     glassMorphismLevel?: typeof glassMorphismLevel;
     sidebarStyle?: typeof sidebarStyle;
     neonColor?: typeof neonColor;
@@ -25,7 +34,18 @@ export function useTheme() {
     if (theme.accentColor) setAccentColor(theme.accentColor);
   };
 
+  // For user preference (only controls light/dark mode)
+  const setUserPreference = (mode: typeof userThemeMode) => {
+    setUserThemeMode(mode);
+  };
+
+  // Toggle admin edit mode - should be restricted to admin users
+  const toggleAdminEditMode = () => {
+    setIsAdminEditMode(!isAdminEditMode);
+  };
+
   return {
+    // Admin theme settings
     glassMorphismLevel,
     sidebarStyle,
     neonColor,
@@ -34,6 +54,16 @@ export function useTheme() {
     setSidebarStyle,
     setNeonColor,
     setAccentColor,
-    setTheme,
+    setAdminTheme,
+    isAdminEditMode,
+    toggleAdminEditMode,
+    adminThemeConfig,
+    
+    // User preference (only light/dark)
+    userThemeMode,
+    setUserPreference,
+    
+    // Combined active theme
+    activeTheme,
   };
 }

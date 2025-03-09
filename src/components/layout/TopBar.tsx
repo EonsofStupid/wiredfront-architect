@@ -3,6 +3,8 @@ import { Menu, PanelRightClose, PanelRightOpen, Settings, Bell, Search } from 'l
 import { cn } from '@/lib/utils';
 import { useAtomValue } from 'jotai';
 import { glassMorphismLevelAtom, neonColorAtom } from '@/atoms';
+import { UserThemeToggle } from '@/components/ui/user-theme-toggle';
+import { useRole } from '@/hooks';
 
 interface TopBarProps {
   onMenuClick: () => void;
@@ -13,6 +15,7 @@ interface TopBarProps {
 const TopBar = ({ onMenuClick, onRightPanelClick, rightSidebarVisible }: TopBarProps) => {
   const glassMorphismLevel = useAtomValue(glassMorphismLevelAtom);
   const neonColor = useAtomValue(neonColorAtom);
+  const { isAdmin } = useRole();
 
   // Get the appropriate glass morphism class
   const getGlassMorphismClass = () => {
@@ -77,6 +80,7 @@ const TopBar = ({ onMenuClick, onRightPanelClick, rightSidebarVisible }: TopBarP
       </div>
       
       <div className="flex items-center space-x-2">
+        <UserThemeToggle />
         <button className={cn(
           "p-2 rounded-full hover:bg-white/10 transition-colors",
           glassMorphismLevel === 'cyber' && "neon-border"
@@ -88,6 +92,7 @@ const TopBar = ({ onMenuClick, onRightPanelClick, rightSidebarVisible }: TopBarP
           glassMorphismLevel === 'cyber' && "neon-border"
         )}>
           <Settings size={20} />
+          {isAdmin && <span className="absolute -top-1 -right-1 w-2 h-2 bg-green-500 rounded-full" />}
         </button>
         <button 
           onClick={onRightPanelClick}
