@@ -17,16 +17,13 @@ const queryClient = new QueryClient({
   },
 });
 
-// Update the router context with our query client
-router.context.queryClient = queryClient;
-
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <JotaiProvider>
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <RouterProvider router={router} />
+        <RouterProvider router={router} context={{ queryClient }} />
       </TooltipProvider>
     </JotaiProvider>
   </QueryClientProvider>

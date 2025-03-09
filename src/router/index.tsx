@@ -1,6 +1,6 @@
 
 import { QueryClient } from '@tanstack/react-query';
-import { Router, createRouter } from '@tanstack/react-router';
+import { createRouter } from '@tanstack/react-router';
 
 // Import the route tree
 import { routeTree } from './routeTree';
@@ -21,8 +21,7 @@ export const router = createRouter({
   context: {
     queryClient,
   },
-  // Enable prefetching on intent to improve performance
-  defaultPreloadDelay: 100,
+  defaultPreload: 'intent',
 });
 
 // Register the router for type safety

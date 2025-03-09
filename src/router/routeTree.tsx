@@ -1,5 +1,5 @@
 
-import { rootRoute } from './routes/__root';
+import { Route as rootRoute } from './routes/__root';
 
 // Import file-based routes
 import { Route as indexRoute } from './routes/index';
