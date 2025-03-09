@@ -1,0 +1,111 @@
+
+:root {
+  /* Base theme variables (preserved from original) */
+  --background: 220 20% 97%;
+  --foreground: 222 47% 11%;
+  --card: 0 0% 100%;
+  --card-foreground: 222 47% 11%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222 47% 11%;
+  --primary: 244 75% 60%;
+  --primary-foreground: 210 40% 98%;
+  --secondary: 210 40% 96.1%;
+  --secondary-foreground: 222 47% 11.2%;
+  --muted: 210 40% 96.1%;
+  --muted-foreground: 215.4 16.3% 46.9%;
+  --accent: 262 83% 58%;
+  --accent-foreground: 210 40% 98%;
+  --destructive: 350 89% 60%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 214.3 31.8% 91.4%;
+  --input: 214.3 31.8% 91.4%;
+  --ring: 222 84% 4.9%;
+  --radius: 0.75rem;
+
+  /* WFPulse theme - default colors */
+  --neon-green: 150 100% 60%;
+  --toxic-purple: 280 90% 50%;
+  --chemical-blue: 190 100% 45%;
+  --radiation-yellow: 60 100% 50%;
+  --electric-pink: 320 100% 55%;
+  
+  /* Digital Effects colors */
+  --matrix-green: 135 100% 50%;
+  --cyber-blue: 195 100% 50%;
+  --digital-purple: 270 100% 60%;
+  --data-red: 350 100% 60%;
+  --code-yellow: 45 100% 50%;
+  
+  /* Glass effect settings */
+  --glass-opacity: 0.05;
+  --glass-blur: 10px;
+  --glass-saturation: 180%;
+  --glass-border-opacity: 0.1;
+  --glass-shadow-opacity: 0.1;
+  
+  /* Cyber effect settings */
+  --cyber-grid-opacity: 0.1;
+  --cyber-line-thickness: 1px;
+  --cyber-glow-strength: 0.8;
+  --cyber-scanline-speed: 3s;
+  
+  /* Scientist effect settings */
+  --scientist-bubble-size: 10px;
+  --scientist-bubble-density: 20;
+  --scientist-liquid-opacity: 0.2;
+  --scientist-glow-color: var(--toxic-green);
+  
+  /* Animation settings */
+  --animation-pulse-glow: 3s;
+  --animation-data-flow: 15s;
+  --animation-scan: 2s;
+  --animation-flicker: 0.5s;
+}
+
+.dark {
+  /* Preserve existing dark mode variables */
+  --background: 235 21% 11%;
+  --foreground: 210 40% 98%;
+  --card: 235 24% 15%;
+  --card-foreground: 210 40% 98%;
+  --popover: 235 24% 15%;
+  --popover-foreground: 210 40% 98%;
+  --primary: 244 75% 60%;
+  --primary-foreground: 210 40% 98%;
+  --secondary: 240 15% 20%;
+  --secondary-foreground: 210 40% 98%;
+  --muted: 240 15% 20%;
+  --muted-foreground: 215 20.2% 75%;
+  --accent: 262 83% 58%;
+  --accent-foreground: 210 40% 98%;
+  --destructive: 350 89% 60%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 240 12% 24%;
+  --input: 240 15% 20%;
+  --ring: 212.7 26.8% 83.9%;
+  
+  /* Enhanced WFPulse colors for dark mode - more intense */
+  --neon-green: 150 100% 65%;
+  --toxic-purple: 280 95% 55%;
+  --chemical-blue: 190 100% 50%;
+  --radiation-yellow: 60 100% 55%;
+  --electric-pink: 320 100% 60%;
+  
+  /* Digital Effects enhanced for dark mode */
+  --matrix-green: 135 100% 55%;
+  --cyber-blue: 195 100% 55%;
+  --digital-purple: 270 100% 65%;
+  --data-red: 350 100% 65%;
+  --code-yellow: 45 100% 55%;
+  
+  /* Glass settings for dark mode */
+  --glass-opacity: 0.07;
+  --glass-blur: 12px;
+  --glass-saturation: 160%;
+  --glass-border-opacity: 0.15;
+  --glass-shadow-opacity: 0.15;
+  
+  /* Cyber settings for dark mode */
+  --cyber-grid-opacity: 0.15;
+  --cyber-glow-strength: 1;
+}

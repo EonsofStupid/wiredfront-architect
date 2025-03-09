@@ -8,6 +8,7 @@ import { Provider as JotaiProvider } from 'jotai';
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
+import './styles/index.css';
 
 const queryClient = new QueryClient({
   defaultOptions: {

@@ -1,0 +1,141 @@
+
+@keyframes scanline {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  33% { opacity: 0.8; }
+  66% { opacity: 0.95; }
+}
+
+.cyber-panel {
+  position: relative;
+  background: rgba(30, 30, 45, var(--glass-opacity));
+  border: var(--cyber-line-thickness) solid rgba(var(--cyber-blue), 0.3);
+  background-image: 
+    linear-gradient(
+      45deg,
+      rgba(var(--matrix-green), var(--cyber-grid-opacity)) 25%,
+      transparent 25%,
+      transparent 75%,
+      rgba(var(--matrix-green), var(--cyber-grid-opacity)) 75%
+    ),
+    linear-gradient(
+      45deg,
+      rgba(var(--matrix-green), var(--cyber-grid-opacity)) 25%,
+      transparent 25%,
+      transparent 75%,
+      rgba(var(--matrix-green), var(--cyber-grid-opacity)) 75%
+    );
+  background-size: 40px 40px;
+  background-position: 0 0, 20px 20px;
+  box-shadow: 0 0 15px rgba(var(--cyber-blue), calc(var(--cyber-glow-strength) * 0.3));
+}
+
+.cyber-panel::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: rgba(var(--cyber-blue), 0.5);
+  box-shadow: 0 0 10px rgba(var(--cyber-blue), var(--cyber-glow-strength));
+}
+
+.cyber-scanline {
+  position: relative;
+  overflow: hidden;
+}
+
+.cyber-scanline::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 50%,
+    rgba(0, 0, 0, 0.1) 51%,
+    transparent 52%
+  );
+  background-size: 100% 4px;
+  pointer-events: none;
+}
+
+.cyber-scanline::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    rgba(var(--cyber-blue), 0.1),
+    transparent 15%,
+    transparent 85%,
+    rgba(var(--cyber-blue), 0.1)
+  );
+  animation: scanline var(--cyber-scanline-speed) linear infinite;
+  pointer-events: none;
+}
+
+.cyber-glow {
+  box-shadow: 0 0 15px rgba(var(--neon-green), var(--cyber-glow-strength));
+  animation: pulse-glow var(--animation-pulse-glow) infinite alternate;
+}
+
+.cyber-glow-text {
+  text-shadow: 
+    0 0 5px rgba(var(--neon-green), var(--cyber-glow-strength)),
+    0 0 10px rgba(var(--neon-green), calc(var(--cyber-glow-strength) * 0.6)),
+    0 0 15px rgba(var(--neon-green), calc(var(--cyber-glow-strength) * 0.3));
+}
+
+.cyber-button {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(
+    90deg,
+    rgba(var(--cyber-blue), 0.2),
+    rgba(var(--digital-purple), 0.2)
+  );
+  border: 1px solid rgba(var(--cyber-blue), 0.3);
+  box-shadow: 
+    0 0 5px rgba(var(--cyber-blue), 0.3),
+    inset 0 0 5px rgba(var(--digital-purple), 0.2);
+  transition: all 0.3s ease;
+}
+
+.cyber-button::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  background: linear-gradient(
+    90deg,
+    rgba(var(--cyber-blue), 0.4),
+    rgba(var(--digital-purple), 0.4)
+  );
+  pointer-events: none;
+}
+
+.cyber-button:hover {
+  box-shadow: 
+    0 0 15px rgba(var(--cyber-blue), 0.5),
+    inset 0 0 10px rgba(var(--digital-purple), 0.3);
+}
+
+.cyber-button:hover::after {
+  opacity: 1;
+}
