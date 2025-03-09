@@ -1,18 +1,14 @@
 
 import { useState, useEffect } from 'react';
-import { useToast } from './use-toast';
+import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
-import { Theme, ThemeMode } from '@/types/theme';
-import { useTheme } from './useTheme';
-import { useRole } from './useRole';
+import { Theme, ThemeConfig } from '@/types/theme';
 
 export function useThemeManager() {
   const [themes, setThemes] = useState<Theme[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isSaving, setIsSaving] = useState(false);
+  const [currentTheme, setCurrentTheme] = useState<Theme | null>(null);
   const { toast } = useToast();
-  const { isAdmin } = useRole();
-  const { setUserPreference, userThemeMode } = useTheme();
 
   const fetchThemes = async () => {
     try {
@@ -20,19 +16,24 @@ export function useThemeManager() {
       const { data, error } = await supabase
         .from('themes')
         .select('*')
-        .order('name');
-      
+        .order('is_default', { ascending: false });
+
       if (error) throw error;
-      setThemes(data || []);
-      return data || [];
+      
+      setThemes(data as Theme[]);
+      
+      // Set current theme to default
+      const defaultTheme = data.find((theme: Theme) => theme.is_default);
+      if (defaultTheme) {
+        setCurrentTheme(defaultTheme as Theme);
+      }
     } catch (error) {
-      console.error("Error fetching themes:", error);
+      console.error('Error fetching themes:', error);
       toast({
-        title: "Error",
-        description: "Failed to load themes. Please try again later.",
-        variant: "destructive",
+        title: 'Error',
+        description: 'Failed to load themes',
+        variant: 'destructive',
       });
-      return [];
     } finally {
       setIsLoading(false);
     }
@@ -42,255 +43,182 @@ export function useThemeManager() {
     fetchThemes();
   }, []);
 
-  const saveTheme = async (theme: Theme) => {
-    if (!isAdmin) {
-      toast({
-        title: "Permission Denied",
-        description: "Only admins can modify themes.",
-        variant: "destructive",
-      });
-      return null;
-    }
-    
+  const createTheme = async (
+    name: string,
+    description: string,
+    themeConfig: ThemeConfig,
+    isDefault: boolean = false
+  ) => {
     try {
-      setIsSaving(true);
-      
+      // If setting this theme as default, update other themes
+      if (isDefault) {
+        const { error } = await supabase
+          .from('themes')
+          .update({ is_default: false })
+          .neq('id', 'dummy'); // Just to make sure it updates all
+
+        if (error) throw error;
+      }
+
+      // Insert new theme
       const { data, error } = await supabase
         .from('themes')
-        .update({
-          name: theme.name,
-          description: theme.description,
-          theme_config: theme.theme_config,
-        })
-        .eq('id', theme.id)
-        .select()
-        .single();
-      
+        .insert([
+          {
+            name,
+            description,
+            theme_config: themeConfig,
+            is_default: isDefault,
+          },
+        ])
+        .select();
+
       if (error) throw error;
-      
-      // Refresh the themes list
-      await fetchThemes();
-      
+
       toast({
-        title: "Theme Saved",
-        description: "The theme has been updated successfully.",
+        title: 'Success',
+        description: 'Theme created successfully',
       });
-      
-      return data;
+
+      // Refresh themes
+      fetchThemes();
+      return data[0];
     } catch (error) {
-      console.error("Error saving theme:", error);
+      console.error('Error creating theme:', error);
       toast({
-        title: "Error",
-        description: "Failed to save theme. Please try again.",
-        variant: "destructive",
+        title: 'Error',
+        description: 'Failed to create theme',
+        variant: 'destructive',
       });
       return null;
-    } finally {
-      setIsSaving(false);
     }
   };
 
-  const createTheme = async (name: string, themeConfig: any) => {
-    if (!isAdmin) {
-      toast({
-        title: "Permission Denied",
-        description: "Only admins can create themes.",
-        variant: "destructive",
-      });
-      return null;
-    }
-    
+  const updateTheme = async (
+    id: string,
+    updates: Partial<{
+      name: string;
+      description: string;
+      theme_config: ThemeConfig;
+      is_default: boolean;
+    }>
+  ) => {
     try {
-      setIsSaving(true);
-      
-      const { data, error } = await supabase
-        .from('themes')
-        .insert({
-          name,
-          description: `Custom theme created on ${new Date().toLocaleDateString()}`,
-          is_default: false,
-          theme_config: themeConfig,
-        })
-        .select()
-        .single();
-      
-      if (error) throw error;
-      
-      // Refresh the themes list
-      await fetchThemes();
-      
-      toast({
-        title: "Theme Created",
-        description: `The theme "${name}" has been created successfully.`,
-      });
-      
-      return data;
-    } catch (error) {
-      console.error("Error creating theme:", error);
-      toast({
-        title: "Error",
-        description: "Failed to create theme. Please try again.",
-        variant: "destructive",
-      });
-      return null;
-    } finally {
-      setIsSaving(false);
-    }
-  };
+      // If setting this theme as default, update other themes
+      if (updates.is_default) {
+        const { error } = await supabase
+          .from('themes')
+          .update({ is_default: false })
+          .neq('id', id);
 
-  const setDefaultTheme = async (themeId: string) => {
-    if (!isAdmin) {
-      toast({
-        title: "Permission Denied",
-        description: "Only admins can set the default theme.",
-        variant: "destructive",
-      });
-      return false;
-    }
-    
-    try {
-      setIsSaving(true);
-      
-      // First, set all themes to non-default
-      await supabase
-        .from('themes')
-        .update({ is_default: false })
-        .not('id', 'is', null);
-      
-      // Then set this theme as default
+        if (error) throw error;
+      }
+
+      // Update the theme
       const { error } = await supabase
         .from('themes')
-        .update({ is_default: true })
-        .eq('id', themeId);
-      
+        .update(updates)
+        .eq('id', id);
+
       if (error) throw error;
-      
-      // Refresh the themes list
-      await fetchThemes();
-      
+
       toast({
-        title: "Default Theme Updated",
-        description: "The default theme has been updated. Changes will apply on reload.",
+        title: 'Success',
+        description: 'Theme updated successfully',
       });
-      
+
+      // Refresh themes
+      fetchThemes();
       return true;
     } catch (error) {
-      console.error("Error setting default theme:", error);
+      console.error('Error updating theme:', error);
       toast({
-        title: "Error",
-        description: "Failed to set default theme. Please try again.",
-        variant: "destructive",
+        title: 'Error',
+        description: 'Failed to update theme',
+        variant: 'destructive',
       });
       return false;
-    } finally {
-      setIsSaving(false);
     }
   };
 
-  const deleteTheme = async (themeId: string) => {
-    if (!isAdmin) {
-      toast({
-        title: "Permission Denied",
-        description: "Only admins can delete themes.",
-        variant: "destructive",
-      });
-      return false;
-    }
-    
+  const deleteTheme = async (id: string) => {
     try {
-      // Check if this is the default theme - can't delete default
-      const themeToDelete = themes.find(t => t.id === themeId);
+      // Check if it's the default theme
+      const themeToDelete = themes.find((theme) => theme.id === id);
       if (themeToDelete?.is_default) {
         toast({
-          title: "Cannot Delete Default Theme",
-          description: "Please set another theme as default first.",
-          variant: "destructive",
+          title: 'Error',
+          description: 'Cannot delete the default theme',
+          variant: 'destructive',
         });
         return false;
       }
-      
-      // Check if this is the last theme - can't delete last theme
-      if (themes.length <= 1) {
-        toast({
-          title: "Cannot Delete Last Theme",
-          description: "At least one theme must exist in the system.",
-          variant: "destructive",
-        });
-        return false;
-      }
-      
-      setIsSaving(true);
-      
-      const { error } = await supabase
-        .from('themes')
-        .delete()
-        .eq('id', themeId);
-      
+
+      const { error } = await supabase.from('themes').delete().eq('id', id);
+
       if (error) throw error;
-      
-      // Refresh the themes list
-      await fetchThemes();
-      
+
       toast({
-        title: "Theme Deleted",
-        description: "The theme has been deleted successfully.",
+        title: 'Success',
+        description: 'Theme deleted successfully',
       });
-      
+
+      // Refresh themes
+      fetchThemes();
       return true;
     } catch (error) {
-      console.error("Error deleting theme:", error);
+      console.error('Error deleting theme:', error);
       toast({
-        title: "Error",
-        description: "Failed to delete theme. Please try again.",
-        variant: "destructive",
+        title: 'Error',
+        description: 'Failed to delete theme',
+        variant: 'destructive',
       });
       return false;
-    } finally {
-      setIsSaving(false);
     }
   };
 
-  const updateUserThemePreference = async (mode: ThemeMode, themeId?: string) => {
+  const setAsDefault = async (id: string) => {
+    return updateTheme(id, { is_default: true });
+  };
+
+  const setUserPreference = async (themeId: string | null, mode: 'light' | 'dark' | 'system') => {
     try {
-      // First update local state for immediate feedback
-      setUserPreference(mode);
-      
-      // Get the current user
-      const { data: { user } } = await supabase.auth.getUser();
-      
-      if (!user) {
-        // If not authenticated, we just use local storage (handled by setUserPreference)
-        return;
-      }
-      
-      // Save preference to database for authenticated users
       const { error } = await supabase
         .from('user_theme_preferences')
         .upsert({
-          user_id: user.id,
-          mode,
+          user_id: (await supabase.auth.getUser()).data.user?.id,
           theme_id: themeId,
-          updated_at: new Date().toISOString(),
+          mode,
         });
-      
+
       if (error) throw error;
-      
+
+      toast({
+        title: 'Success',
+        description: 'Theme preference updated',
+      });
+
+      return true;
     } catch (error) {
-      console.error("Error saving theme preference:", error);
-      // Don't show error toast for this, as it's not critical
+      console.error('Error setting user preference:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to update theme preference',
+        variant: 'destructive',
+      });
+      return false;
     }
   };
 
   return {
     themes,
     isLoading,
-    isSaving,
+    currentTheme,
     fetchThemes,
-    saveTheme,
     createTheme,
-    setDefaultTheme,
+    updateTheme,
     deleteTheme,
-    updateUserThemePreference,
-    currentMode: userThemeMode,
+    setAsDefault,
+    setUserPreference,
   };
 }
