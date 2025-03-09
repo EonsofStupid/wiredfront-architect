@@ -3,9 +3,24 @@ import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import MainLayout from '@/components/layout/MainLayout';
 import { Shield, Zap, Code, Users } from 'lucide-react';
+import { useAtomValue } from 'jotai';
+import { glassMorphismLevelAtom } from '@/atoms';
 
 const LandingPage = () => {
   const navigate = useNavigate();
+  const glassMorphismLevel = useAtomValue(glassMorphismLevelAtom);
+
+  // Get the appropriate glass morphism class
+  const getGlassMorphismClass = () => {
+    switch (glassMorphismLevel) {
+      case 'cyber':
+        return "cyber-glassmorphism";
+      case 'enhanced':
+        return "enhanced-glassmorphism";
+      default:
+        return "glassmorphism";
+    }
+  };
 
   return (
     <MainLayout>
@@ -65,7 +80,7 @@ const LandingPage = () => {
           ].map((feature, index) => (
             <div 
               key={index}
-              className={`${glassMorphismClass} p-6 rounded-lg border border-white/10 hover-random-effect`}
+              className={`${getGlassMorphismClass()} p-6 rounded-lg border border-white/10 hover-random-effect`}
             >
               <feature.icon className={`h-10 w-10 mb-4 ${feature.color}`} />
               <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
@@ -77,8 +92,5 @@ const LandingPage = () => {
     </MainLayout>
   );
 };
-
-// Utility function for glass morphism class based on current theme
-const glassMorphismClass = "cyber-glassmorphism bg-white/5 backdrop-blur-lg";
 
 export default LandingPage;

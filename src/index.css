@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -558,4 +559,8 @@
     clip-path: inset(18% 0 79% 0);
     transform: translate(2px, 2px);
   }
-  1
+  100% {
+    clip-path: inset(0% 0 0% 0);
+    transform: translate(0, 0);
+  }
+}

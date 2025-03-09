@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Add mouse tracking for cyber background effects
 function setupCyberBackgrounds() {
-  const cyberElements = document.querySelectorAll('.cyber-background-animation');
+  const cyberElements = document.querySelectorAll('.cyber-background-animation') as NodeListOf<HTMLElement>;
   
   document.addEventListener('mousemove', (e) => {
     const { clientX, clientY } = e;
@@ -25,7 +25,7 @@ function setupCyberBackgrounds() {
 
 // Setup random hover effects
 function setupRandomHoverEffects() {
-  const hoverElements = document.querySelectorAll('.hover-random-effect');
+  const hoverElements = document.querySelectorAll('.hover-random-effect') as NodeListOf<HTMLElement>;
   
   const effects = [
     'neon-pulse',
