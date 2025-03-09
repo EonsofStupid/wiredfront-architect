@@ -1,0 +1,29 @@
+
+/* Glass Morphism Effects */
+@layer components {
+  /* Enhanced Glass Morphism */
+  .glassmorphism {
+    @apply bg-gradient-glass backdrop-blur-md border border-white/10 shadow-lg relative;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  }
+
+  .enhanced-glassmorphism {
+    @apply bg-gradient-glass backdrop-blur-md border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.2)] relative;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.3);
+  }
+
+  .cyber-glassmorphism {
+    @apply bg-gradient-glass backdrop-blur-lg bg-black/20 border-l border-t border-white/20 border-r border-b border-black/40 shadow-neon relative;
+    box-shadow: 0 0 15px rgba(var(--neon-blue), 0.3);
+  }
+
+  /* Apple-inspired depth effects */
+  .apple-glass {
+    @apply relative border border-white/20 backdrop-blur-xl;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+    box-shadow: 
+      0 10px 30px rgba(0, 0, 0, 0.2),
+      0 1px 3px rgba(0, 0, 0, 0.1),
+      inset 0 1px 1px rgba(255, 255, 255, 0.2);
+  }
+}
