@@ -3,13 +3,9 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Provider as JotaiProvider } from 'jotai';
-import { ThemeProvider } from "@/components/providers/ThemeProvider";
-import LandingPage from "./pages/LandingPage";
-import UserOverview from "./pages/user/Overview";
-import AdminDashboard from "./pages/admin/Dashboard";
-import NotFound from "./pages/NotFound";
+import { RouterProvider } from '@tanstack/router';
+import { router } from './router';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -20,24 +16,17 @@ const queryClient = new QueryClient({
   },
 });
 
+// Update the router context with our query client
+router.context.queryClient = queryClient;
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <JotaiProvider>
-      <ThemeProvider>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<LandingPage />} />
-              <Route path="/user/overview" element={<UserOverview />} />
-              <Route path="/admin/dashboard" element={<AdminDashboard />} />
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </BrowserRouter>
-        </TooltipProvider>
-      </ThemeProvider>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <RouterProvider router={router} />
+      </TooltipProvider>
     </JotaiProvider>
   </QueryClientProvider>
 );

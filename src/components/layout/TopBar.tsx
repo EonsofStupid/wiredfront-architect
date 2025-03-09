@@ -5,7 +5,7 @@ import { useAtomValue } from 'jotai';
 import { glassMorphismLevelAtom, neonColorAtom } from '@/atoms';
 import { UserThemeToggle } from '@/components/ui/user-theme-toggle';
 import { useRole } from '@/hooks';
-import { Link } from 'react-router-dom';
+import { Link } from '@tanstack/router';
 import {
   DropdownMenu,
   DropdownMenuContent,

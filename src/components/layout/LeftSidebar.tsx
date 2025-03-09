@@ -3,7 +3,7 @@ import { Home, Layers, Code, Image, MessageCircle, FileText, PlusCircle } from '
 import { cn } from '@/lib/utils';
 import { useAtomValue } from 'jotai';
 import { sidebarStyleAtom, neonColorAtom, glassMorphismLevelAtom } from '@/atoms';
-import { Link } from 'react-router-dom';
+import { Link } from '@tanstack/router';
 
 interface LeftSidebarProps {
   collapsed: boolean;
