@@ -1,4 +1,6 @@
 
+export type ThemeStatus = 'active' | 'draft' | 'archived' | 'pending_approval';
+
 export interface Theme {
   id: string;
   name: string;
@@ -7,6 +9,46 @@ export interface Theme {
   theme_config: ThemeConfig;
   created_at: string;
   updated_at: string;
+  version: number;
+  status: ThemeStatus;
+  is_public: boolean;
+  created_by: string | null;
+  preview_image: string | null;
+  validation_status: ThemeValidation;
+  parent_theme_id: string | null;
+}
+
+export interface ThemeVersion {
+  id: string;
+  theme_id: string;
+  version: number;
+  theme_config: ThemeConfig;
+  created_at: string;
+  created_by: string | null;
+  notes: string | null;
+  status: ThemeStatus;
+  is_active: boolean;
+}
+
+export interface ThemeAuditLog {
+  id: string;
+  theme_id: string;
+  user_id: string | null;
+  action: string;
+  previous_state: Record<string, any> | null;
+  new_state: Record<string, any>;
+  metadata: Record<string, any>;
+  created_at: string;
+}
+
+export interface ThemeValidation {
+  is_valid: boolean;
+  messages: ThemeValidationMessage[];
+}
+
+export interface ThemeValidationMessage {
+  type: 'error' | 'warning';
+  message: string;
 }
 
 export interface ThemeConfig {

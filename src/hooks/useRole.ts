@@ -1,41 +1,61 @@
 
 import { useState, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
 
-// This would normally come from your auth system
-type UserRole = 'admin' | 'user' | 'guest';
+type UserRole = 'user' | 'admin' | 'super_admin' | 'developer' | 'subscriber' | 'guest';
 
 export function useRole() {
-  // In a real app, this would be fetched from your auth system
   const [role, setRole] = useState<UserRole>('guest');
-  const [isLoading, setIsLoading] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Mock authentication check - in a real app, this would check the user's session
-    const checkAuth = async () => {
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
-      // For demo purposes, randomly assign admin role 20% of the time
-      // In a real app, this would be determined by your auth system
-      const mockRole: UserRole = Math.random() < 0.2 ? 'admin' : 'user';
-      setRole(mockRole);
-      setIsLoading(false);
+    const fetchUserRole = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        
+        if (!user) {
+          setRole('guest');
+          setIsAdmin(false);
+          return;
+        }
+        
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('role')
+          .eq('id', user.id)
+          .single();
+        
+        if (error) {
+          console.error('Error fetching user role:', error);
+          setRole('guest');
+          setIsAdmin(false);
+          return;
+        }
+        
+        const userRole = data.role as UserRole;
+        setRole(userRole);
+        setIsAdmin(['admin', 'super_admin'].includes(userRole));
+      } catch (error) {
+        console.error('Error checking user role:', error);
+        setRole('guest');
+        setIsAdmin(false);
+      } finally {
+        setLoading(false);
+      }
     };
     
-    checkAuth();
+    fetchUserRole();
+    
+    // Subscribe to auth changes
+    const { data: authListener } = supabase.auth.onAuthStateChange(() => {
+      fetchUserRole();
+    });
+    
+    return () => {
+      authListener.subscription.unsubscribe();
+    };
   }, []);
 
-  const isAdmin = role === 'admin';
-  const isUser = role === 'user' || role === 'admin'; // Admins have user privileges too
-  const isGuest = role === 'guest';
-
-  return {
-    role,
-    isAdmin,
-    isUser,
-    isGuest,
-    isLoading,
-    // For testing/demo purposes only - in a real app you wouldn't expose this
-    setRole
-  };
+  return { role, isAdmin, loading };
 }
