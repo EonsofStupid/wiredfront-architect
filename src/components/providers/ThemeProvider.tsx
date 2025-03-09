@@ -5,6 +5,7 @@ import { activeThemeAtom, userThemeModeAtom } from '@/atoms';
 import ThemeErrorBoundary from './ThemeErrorBoundary';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/components/ui/use-toast';
+import { ThemeConfig } from '@/types/theme';
 
 // Theme context for components that need theme info but don't want to use jotai directly
 export type Theme = {
@@ -40,7 +41,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const userThemeMode = useAtomValue(userThemeModeAtom);
   const [themeError, setThemeError] = useState<Error | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [dynamicTheme, setDynamicTheme] = useState<any>(null);
+  const [dynamicTheme, setDynamicTheme] = useState<ThemeConfig | null>(null);
   const [dynamicColors, setDynamicColors] = useState<Record<string, string>>({});
 
   // Fetch theme from database
@@ -168,8 +169,8 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     sidebarStyle: activeTheme.sidebarStyle,
     neonColor: activeTheme.neonColor,
     accentColor: activeTheme.accentColor,
-    name: dynamicTheme?.name || 'WFPulse',
-    cssVars: dynamicTheme
+    name: dynamicTheme ? 'WFPulse' : 'WFPulse',
+    cssVars: dynamicTheme ? dynamicTheme : undefined
   };
 
   return (

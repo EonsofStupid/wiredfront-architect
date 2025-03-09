@@ -844,6 +844,36 @@ export type Database = {
         }
         Relationships: []
       }
+      themes: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: string
+          is_default: boolean | null
+          name: string
+          theme_config: Json
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          is_default?: boolean | null
+          name: string
+          theme_config: Json
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          is_default?: boolean | null
+          name?: string
+          theme_config?: Json
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       training_examples: {
         Row: {
           context: Json | null
@@ -979,6 +1009,35 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      user_theme_preferences: {
+        Row: {
+          mode: string
+          theme_id: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          mode?: string
+          theme_id?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          mode?: string
+          theme_id?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_theme_preferences_theme_id_fkey"
+            columns: ["theme_id"]
+            isOneToOne: false
+            referencedRelation: "themes"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
