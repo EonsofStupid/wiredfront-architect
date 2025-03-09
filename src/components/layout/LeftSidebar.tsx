@@ -3,7 +3,7 @@ import { Home, Layers, Code, Image, MessageCircle, FileText, PlusCircle } from '
 import { cn } from '@/lib/utils';
 import { useAtomValue } from 'jotai';
 import { sidebarStyleAtom, neonColorAtom, glassMorphismLevelAtom } from '@/atoms';
-import { Link } from '@tanstack/router';
+import { Link, useRouter } from '@tanstack/react-router';
 
 interface LeftSidebarProps {
   collapsed: boolean;
@@ -13,14 +13,18 @@ const LeftSidebar = ({ collapsed }: LeftSidebarProps) => {
   const sidebarStyle = useAtomValue(sidebarStyleAtom);
   const neonColor = useAtomValue(neonColorAtom);
   const glassMorphismLevel = useAtomValue(glassMorphismLevelAtom);
+  const router = useRouter();
+  
+  // Get current route to determine which nav item is active
+  const pathname = router.state.location.pathname;
   
   const sidebarItems = [
-    { icon: Home, label: 'Dashboard', active: true, path: '/' },
-    { icon: Code, label: 'Developer', path: '/developer' },
-    { icon: MessageCircle, label: 'AI Chat', path: '/chat' },
-    { icon: Layers, label: 'Projects', path: '/projects' },
-    { icon: Image, label: 'Gallery', path: '/gallery' },
-    { icon: FileText, label: 'Documents', path: '/documents' },
+    { icon: Home, label: 'Dashboard', path: '/', active: pathname === '/' },
+    { icon: Code, label: 'Developer', path: '/developer', active: pathname === '/developer' },
+    { icon: MessageCircle, label: 'AI Chat', path: '/chat', active: pathname === '/chat' },
+    { icon: Layers, label: 'Projects', path: '/projects', active: pathname === '/projects' },
+    { icon: Image, label: 'Gallery', path: '/gallery', active: pathname === '/gallery' },
+    { icon: FileText, label: 'Documents', path: '/documents', active: pathname === '/documents' },
   ];
 
   const getSidebarClass = () => {
@@ -98,6 +102,9 @@ const LeftSidebar = ({ collapsed }: LeftSidebarProps) => {
                   "hover:bg-sidebar-accent group relative overflow-hidden hover-random-effect",
                   item.active ? "bg-sidebar-accent" : "text-sidebar-foreground"
                 )}
+                activeProps={{
+                  className: "bg-sidebar-accent"
+                }}
               >
                 <item.icon 
                   size={20} 

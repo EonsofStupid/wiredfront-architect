@@ -1,10 +1,7 @@
 
-import { Route } from '@tanstack/router';
-import { rootRoute } from './root';
+import { createFileRoute } from '@tanstack/react-router';
 import LandingPage from '@/pages/LandingPage';
 
-export const indexRoute = new Route({
-  getParentRoute: () => rootRoute,
-  path: '/',
+export const indexRoute = createFileRoute('/')({
   component: LandingPage,
 });

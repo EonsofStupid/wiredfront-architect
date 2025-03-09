@@ -1,22 +1,36 @@
 
-import { Router } from '@tanstack/router';
 import { QueryClient } from '@tanstack/react-query';
-import { routeTree } from './routes';
+import { Router, createRouter } from '@tanstack/react-router';
 
-// Create the router instance
-const queryClient = new QueryClient();
+// Import the route tree
+import { routeTree } from './routeTree';
 
-export const router = new Router({
-  routeTree,
-  defaultPreload: 'intent',
-  context: {
-    queryClient,
+// Create a new query client
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5, // 5 minutes
+      retry: 1,
+    },
   },
 });
 
+// Create the router instance
+const router = createRouter({
+  routeTree,
+  context: {
+    queryClient,
+  },
+  // Enable prefetching on intent to improve performance
+  defaultPreloadDelay: 100,
+  // Add defaultPendingComponent, defaultErrorComponent, etc. as needed
+});
+
 // Register the router for type safety
-declare module '@tanstack/router' {
+declare module '@tanstack/react-router' {
   interface Register {
     router: typeof router;
   }
 }
+
+export { router };
