@@ -7,6 +7,7 @@ import { Provider as JotaiProvider } from 'jotai';
 import { RouterProvider } from '@tanstack/react-router';
 import { router } from './router';
 
+// Create a query client
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {

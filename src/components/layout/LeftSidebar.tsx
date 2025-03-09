@@ -1,4 +1,3 @@
-
 import { Home, Layers, Code, Image, MessageCircle, FileText, PlusCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAtomValue } from 'jotai';

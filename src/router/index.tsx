@@ -16,14 +16,13 @@ const queryClient = new QueryClient({
 });
 
 // Create the router instance
-const router = createRouter({
+export const router = createRouter({
   routeTree,
   context: {
     queryClient,
   },
   // Enable prefetching on intent to improve performance
   defaultPreloadDelay: 100,
-  // Add defaultPendingComponent, defaultErrorComponent, etc. as needed
 });
 
 // Register the router for type safety
@@ -32,5 +31,3 @@ declare module '@tanstack/react-router' {
     router: typeof router;
   }
 }
-
-export { router };
