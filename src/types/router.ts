@@ -1,4 +1,3 @@
-
 import { User } from '@/types';
 
 export interface AdminStats {
@@ -31,9 +30,3 @@ export interface SearchParams {
   adminDashboard: { view?: string };
   notFound: Record<string, never>;
 }
-
-// Route types for type assertions
-export type IndexRouteType = ReturnType<typeof import('../router/routes/index').Route>;
-export type UserOverviewRouteType = ReturnType<typeof import('../router/routes/user/overview').Route>;
-export type AdminDashboardRouteType = ReturnType<typeof import('../router/routes/admin/dashboard').Route>;
-export type NotFoundRouteType = ReturnType<typeof import('../router/routes/not-found').Route>;

@@ -16,7 +16,7 @@ const queryClient = new QueryClient({
 });
 
 // Create a default error component
-const DefaultErrorComponent: ErrorComponent = ({ error }) => {
+const DefaultErrorComponent = ({ error }: { error: Error }) => {
   console.error('Router error:', error);
   return (
     <div className="p-4 bg-destructive/20 rounded-md">
