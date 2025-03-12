@@ -8,5 +8,11 @@ export interface RouterContext {
 }
 
 export const Route = createRootRoute<RouterContext>({
-  component: () => <Outlet />
+  component: () => {
+    return (
+      <div className="app-container">
+        <Outlet />
+      </div>
+    );
+  }
 });
