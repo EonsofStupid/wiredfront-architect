@@ -1,6 +1,6 @@
 
 import { QueryClient } from '@tanstack/react-query';
-import { Router, ErrorComponent, createRouter } from '@tanstack/react-router';
+import { createRouter } from '@tanstack/react-router';
 
 // Import the route tree
 import { routeTree } from './routeTree';

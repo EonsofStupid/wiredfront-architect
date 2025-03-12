@@ -1,3 +1,4 @@
+
 import { User } from '@/types';
 
 export interface AdminStats {
@@ -7,7 +8,8 @@ export interface AdminStats {
   responseTime: string;
 }
 
-// Define route params for each route
+// These interfaces can be used for type checking within components
+// but we'll avoid using them directly in route definitions
 export interface RouteParams {
   index: Record<string, never>;
   userOverview: Record<string, never>;
@@ -15,7 +17,6 @@ export interface RouteParams {
   notFound: Record<string, string>;
 }
 
-// Define data structure for each route
 export interface RouteData {
   index: undefined;
   userOverview: { user?: User };
@@ -23,7 +24,6 @@ export interface RouteData {
   notFound: undefined;
 }
 
-// Define search params for each route
 export interface SearchParams {
   index: Record<string, never>;
   userOverview: { tab?: string };
