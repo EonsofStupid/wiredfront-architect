@@ -1,19 +1,10 @@
 
-import { QueryClient } from '@tanstack/react-query';
 import { createRouter } from '@tanstack/react-router';
 
 // Import the route tree
 import { routeTree } from './routeTree';
 
-// Create a new query client
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 1000 * 60 * 5, // 5 minutes
-      retry: 1,
-    },
-  },
-});
+// We'll use the queryClient from App.tsx
 
 // Create a default error component
 const DefaultErrorComponent = ({ error }: { error: Error }) => {
@@ -30,7 +21,7 @@ const DefaultErrorComponent = ({ error }: { error: Error }) => {
 export const router = createRouter({
   routeTree,
   context: {
-    queryClient,
+    // We'll provide this from App.tsx
   },
   defaultPreload: 'intent',
   defaultPreloadDelay: 100,
