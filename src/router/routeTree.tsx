@@ -1,29 +1,15 @@
 
-import { RootRoute } from '@tanstack/react-router'
-import { Route as IndexRoute } from './routes/index'
-import { Route as NotFoundRoute } from './routes/not-found'
-import { Route as AdminDashboardRoute } from './routes/admin/dashboard'
-import { Route as UserOverviewRoute } from './routes/user/overview'
-import { QueryClient } from '@tanstack/react-query'
+import { routeTree as baseRouteTree } from '@tanstack/react-router'
 
-// Create a properly typed context for our router
-export interface RouterContext {
-  queryClient: QueryClient;
-}
+import { Route as rootRoute } from './routes/__root'
+import { Route as indexRoute } from './routes/index'
+import { Route as notFoundRoute } from './routes/not-found'
+import { Route as adminDashboardRoute } from './routes/admin/dashboard'
+import { Route as userOverviewRoute } from './routes/user/overview'
 
-// Create the root route
-export const rootRoute = new RootRoute<RouterContext>({
-  component: ({ children }) => (
-    <div className="app-container">
-      {children}
-    </div>
-  )
-})
-
-// Build the route tree using the root route
 export const routeTree = rootRoute.addChildren([
-  IndexRoute,
-  NotFoundRoute,
-  AdminDashboardRoute,
-  UserOverviewRoute,
+  indexRoute,
+  notFoundRoute,
+  adminDashboardRoute,
+  userOverviewRoute,
 ])

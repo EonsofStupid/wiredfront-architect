@@ -1,5 +1,5 @@
 
-import { createRouter } from '@tanstack/react-router'
+import { Router, createRouter } from '@tanstack/react-router'
 import { routeTree } from './routeTree'
 import { QueryClient } from '@tanstack/react-query'
 
@@ -18,7 +18,7 @@ const DefaultErrorComponent = ({ error }: { error: Error }) => {
 export const router = createRouter({
   routeTree,
   context: {
-    queryClient: undefined!, // This will be set in App.tsx
+    queryClient: new QueryClient(), // Initialize with a default QueryClient
   },
   defaultPreload: 'intent',
   defaultPreloadDelay: 100,
