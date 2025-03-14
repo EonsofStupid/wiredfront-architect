@@ -1,4 +1,5 @@
-import { Home, Layers, Code, Image, MessageCircle, FileText, PlusCircle } from 'lucide-react';
+
+import { Home, Layers, Code, Image, MessageCircle, FileText, PlusCircle, Settings, User } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAtomValue } from 'jotai';
 import { sidebarStyleAtom, neonColorAtom, glassMorphismLevelAtom } from '@/atoms';
@@ -19,6 +20,8 @@ const LeftSidebar = ({ collapsed }: LeftSidebarProps) => {
   
   const sidebarItems = [
     { icon: Home, label: 'Dashboard', path: '/', active: pathname === '/' },
+    { icon: User, label: 'User Overview', path: '/user/overview', active: pathname === '/user/overview' },
+    { icon: Settings, label: 'Admin Dashboard', path: '/admin/dashboard', active: pathname === '/admin/dashboard' },
     { icon: Code, label: 'Developer', path: '/developer', active: pathname === '/developer' },
     { icon: MessageCircle, label: 'AI Chat', path: '/chat', active: pathname === '/chat' },
     { icon: Layers, label: 'Projects', path: '/projects', active: pathname === '/projects' },
@@ -101,9 +104,6 @@ const LeftSidebar = ({ collapsed }: LeftSidebarProps) => {
                   "hover:bg-sidebar-accent group relative overflow-hidden hover-random-effect",
                   item.active ? "bg-sidebar-accent" : "text-sidebar-foreground"
                 )}
-                activeProps={{
-                  className: "bg-sidebar-accent"
-                }}
               >
                 <item.icon 
                   size={20} 
