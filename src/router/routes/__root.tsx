@@ -11,7 +11,9 @@ export interface RouterContext {
 export const Route = createRootRoute<RouterContext>({
   component: () => (
     <RootLayout.Base>
-      <Outlet />
+      <RootLayout.Main>
+        <Outlet />
+      </RootLayout.Main>
     </RootLayout.Base>
   )
 });

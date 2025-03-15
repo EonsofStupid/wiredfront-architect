@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useAtom } from 'jotai';
 import { leftSidebarCollapsedAtom, rightSidebarVisibleAtom } from '@/atoms';
 import TopBar from './TopBar';
