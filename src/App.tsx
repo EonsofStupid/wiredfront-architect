@@ -6,6 +6,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Provider as JotaiProvider } from 'jotai';
 import { RouterProvider } from '@tanstack/react-router';
 import { router } from './router';
+import { useRole } from '@/hooks/useRole';
+import { useUserStore } from '@/stores/useUserStore';
 
 // Create a query client
 const queryClient = new QueryClient({
@@ -17,21 +19,31 @@ const queryClient = new QueryClient({
   },
 });
 
-// Update the router context with our query client
-const routerWithContext = router.withContext({
-  queryClient,
-});
+function App() {
+  // Get authentication state and role from our hooks
+  const { role, isAdmin, isLoading } = useRole();
+  const { isAuthenticated } = useUserStore();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <JotaiProvider>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <RouterProvider router={routerWithContext} />
-      </TooltipProvider>
-    </JotaiProvider>
-  </QueryClientProvider>
-);
+  // Update the router context with our query client and auth state
+  const routerWithContext = router.withContext({
+    queryClient,
+    isAuthenticated,
+    role,
+    isAdmin,
+    isLoading
+  });
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <JotaiProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <RouterProvider router={routerWithContext} />
+        </TooltipProvider>
+      </JotaiProvider>
+    </QueryClientProvider>
+  );
+}
 
 export default App;

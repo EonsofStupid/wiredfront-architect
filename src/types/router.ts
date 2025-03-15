@@ -8,22 +8,36 @@ export interface AdminStats {
   responseTime: string;
 }
 
+export type AppRoute = 
+  | '/'
+  | '/admin/dashboard'
+  | '/user/overview'
+  | '*';
+
+// Role-based route configuration
 export interface RouterConfig {
   routes: {
     index: {
       path: '/';
       layout: 'main';
+      auth: false;
     };
     userOverview: {
       path: '/user/overview';
       layout: 'main';
       auth: true;
+      roles?: string[];
     };
     adminDashboard: {
       path: '/admin/dashboard';
       layout: 'main';
       auth: true;
-      roles: ['admin'];
+      roles: ['admin', 'superadmin'];
+    };
+    notFound: {
+      path: '*';
+      layout: 'main';
+      auth: false;
     };
   };
 }
