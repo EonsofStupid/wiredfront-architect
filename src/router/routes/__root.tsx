@@ -1,22 +1,12 @@
 
 import { Outlet, createRootRoute } from '@tanstack/react-router';
-import { QueryClient } from '@tanstack/react-query';
 import RootLayout from '@/layouts/RootLayout';
 import { useRole } from '@/hooks/useRole';
 import { useUserStore } from '@/stores/useUserStore';
 import { useEffect } from 'react';
-import { toast } from '@/components/ui/use-toast';
+import { RouterContext } from '@/router';
 
-// Create a properly typed context for our router
-export interface RouterContext {
-  queryClient: QueryClient;
-  isAuthenticated: boolean;
-  role: string;
-  isAdmin: boolean;
-  isLoading: boolean;
-}
-
-export const Route = createRootRoute<RouterContext>({
+export const Route = createRootRoute({
   component: RootComponent,
 });
 

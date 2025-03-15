@@ -4,7 +4,8 @@ import { useAtomValue } from 'jotai';
 import { glassMorphismLevelAtom, neonColorAtom } from '@/atoms';
 import { UserThemeToggle } from '@/components/ui/user-theme-toggle';
 import { useRole } from '@/hooks';
-import { Link } from '@tanstack/react-router';
+import { Link, useRouter } from '@tanstack/react-router';
+import { toast } from '@/components/ui/use-toast';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,6 +25,7 @@ const TopBar = ({ onMenuClick, onRightPanelClick, rightSidebarVisible }: TopBarP
   const glassMorphismLevel = useAtomValue(glassMorphismLevelAtom);
   const neonColor = useAtomValue(neonColorAtom);
   const { isAdmin, role } = useRole();
+  const router = useRouter();
 
   const getGlassMorphismClass = () => {
     switch (glassMorphismLevel) {
@@ -64,8 +66,6 @@ const TopBar = ({ onMenuClick, onRightPanelClick, rightSidebarVisible }: TopBarP
         </button>
         <Link 
           to="/" 
-          search={{}} 
-          params={{}}
           className={cn(
             "text-xl font-semibold",
             glassMorphismLevel === 'cyber' ? getNeonTextClass() : "text-gradient"
@@ -120,22 +120,40 @@ const TopBar = ({ onMenuClick, onRightPanelClick, rightSidebarVisible }: TopBarP
           <DropdownMenuContent className="cyber-glassmorphism border-white/10 min-w-[200px]">
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuSeparator className="bg-white/10" />
-            <DropdownMenuItem className="hover-random-effect">
+            <DropdownMenuItem 
+              className="hover-random-effect"
+              onClick={() => {
+                toast({
+                  title: "Coming Soon",
+                  description: "Profile page will be available in a future update.",
+                });
+              }}
+            >
               <User className="mr-2 h-4 w-4" />
-              <Link to="/profile" search={{}} params={{}}>Profile</Link>
+              <span>Profile</span>
             </DropdownMenuItem>
-            <DropdownMenuItem className="hover-random-effect">
+            <DropdownMenuItem 
+              className="hover-random-effect"
+              onClick={() => {
+                router.navigate({ to: '/user/overview' });
+              }}
+            >
               <LayoutDashboard className="mr-2 h-4 w-4" />
-              <Link to="/user/overview" search={{}} params={{}}>Overview</Link>
+              <span>Overview</span>
             </DropdownMenuItem>
             
             {isAdmin && (
               <>
                 <DropdownMenuSeparator className="bg-white/10" />
                 <DropdownMenuLabel>Administration</DropdownMenuLabel>
-                <DropdownMenuItem className="hover-random-effect">
+                <DropdownMenuItem 
+                  className="hover-random-effect"
+                  onClick={() => {
+                    router.navigate({ to: '/admin/dashboard' });
+                  }}
+                >
                   <UserCog className="mr-2 h-4 w-4" />
-                  <Link to="/admin/dashboard" search={{}} params={{}}>Admin Dashboard</Link>
+                  <span>Admin Dashboard</span>
                 </DropdownMenuItem>
               </>
             )}

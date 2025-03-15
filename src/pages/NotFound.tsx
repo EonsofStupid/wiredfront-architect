@@ -1,11 +1,11 @@
 
-import { useNavigate } from "@tanstack/react-router";
+import { useRouter } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { AlertOctagon, ArrowLeft } from "lucide-react";
-import { Link } from "@tanstack/react-router";
+import { Button } from "@/components/ui/button";
 
 const NotFound = () => {
-  const navigate = useNavigate();
+  const router = useRouter();
 
   useEffect(() => {
     console.error(
@@ -22,13 +22,13 @@ const NotFound = () => {
         </div>
         <h1 className="text-4xl font-bold mb-2 text-gradient">404</h1>
         <p className="text-xl text-foreground/80 mb-6">Oops! Page not found</p>
-        <Link 
-          to="/"
+        <Button 
           className="inline-flex items-center py-2 px-4 rounded-lg bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition-colors"
+          onClick={() => router.navigate({ to: '/' })}
         >
           <ArrowLeft size={16} className="mr-2" />
           Return to Dashboard
-        </Link>
+        </Button>
       </div>
     </div>
   );

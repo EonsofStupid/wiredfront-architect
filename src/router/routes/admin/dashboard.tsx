@@ -1,8 +1,8 @@
 
-import { createFileRoute, redirect } from '@tanstack/react-router';
+import { createFileRoute } from '@tanstack/react-router';
 import AdminDashboard from '@/pages/admin/Dashboard';
 import { toast } from '@/components/ui/use-toast';
-import { RouterContext } from '../__root';
+import { RouterContext } from '@/router';
 
 export const Route = createFileRoute('/admin/dashboard')({
   component: AdminDashboard,
@@ -21,7 +21,7 @@ export const Route = createFileRoute('/admin/dashboard')({
         variant: "destructive"
       });
       
-      return redirect({
+      throw context.router.navigate({
         to: '/',
         search: {
           // Optional: Add a redirect param to return after login
@@ -38,9 +38,8 @@ export const Route = createFileRoute('/admin/dashboard')({
         variant: "destructive"
       });
       
-      return redirect({
-        to: '/user/overview',
-        search: {}
+      throw context.router.navigate({
+        to: '/user/overview'
       });
     }
     

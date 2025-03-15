@@ -1,8 +1,8 @@
 
-import { createFileRoute, redirect } from '@tanstack/react-router';
+import { createFileRoute } from '@tanstack/react-router';
 import UserOverview from '@/pages/user/Overview';
 import { toast } from '@/components/ui/use-toast';
-import { RouterContext } from '../__root';
+import { RouterContext } from '@/router';
 
 export const Route = createFileRoute('/user/overview')({
   component: UserOverview,
@@ -21,7 +21,7 @@ export const Route = createFileRoute('/user/overview')({
         variant: "destructive"
       });
       
-      return redirect({
+      throw context.router.navigate({
         to: '/',
         search: {
           // Optional: Add a redirect param to return after login

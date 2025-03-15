@@ -1,12 +1,13 @@
 
 import { Button } from "@/components/ui/button";
-import { Link } from "@tanstack/react-router";
+import { Link, useRouter } from "@tanstack/react-router";
 import { Shield, Zap, Code, Users } from 'lucide-react';
 import { useAtomValue } from 'jotai';
 import { glassMorphismLevelAtom } from '@/atoms';
 
 const LandingPage = () => {
   const glassMorphismLevel = useAtomValue(glassMorphismLevelAtom);
+  const router = useRouter();
   
   const getGlassMorphismClass = () => {
     switch(glassMorphismLevel) {
@@ -58,9 +59,9 @@ const LandingPage = () => {
           <Button 
             size="lg" 
             className="cyber-button"
-            asChild
+            onClick={() => router.navigate({ to: '/user/overview' })}
           >
-            <Link to="/user/overview">Get Started</Link>
+            Get Started
           </Button>
           <Button 
             size="lg" 

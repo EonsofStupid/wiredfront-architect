@@ -1,12 +1,14 @@
 
 import React, { useEffect } from 'react';
-import { Router, createRouter, RouterProvider } from '@tanstack/react-router';
+import { 
+  Router,
+  createRouter, 
+  RouterProvider,
+  redirect
+} from '@tanstack/react-router';
 import { routeTree } from './routeTree';
 import { QueryClient } from '@tanstack/react-query';
 import { toast } from '@/components/ui/use-toast';
-import { useRole } from '@/hooks/useRole';
-import { useUserStore } from '@/stores/useUserStore';
-import { RouterContext } from './routes/__root';
 
 // Create a default error component with better error handling
 const DefaultErrorComponent = ({ error }: { error: Error }) => {
@@ -34,24 +36,35 @@ const DefaultErrorComponent = ({ error }: { error: Error }) => {
   );
 }
 
+// Define the router context interface
+export interface RouterContext {
+  queryClient: QueryClient;
+  isAuthenticated: boolean;
+  role: string;
+  isAdmin: boolean;
+  isLoading: boolean;
+}
+
+// Create the query client - we'll use this for data fetching
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5, // 5 minutes
+      retry: 1,
+    },
+  },
+});
+
 // Create the router instance with proper options
-export const router = createRouter<RouterContext>({
+export const router = createRouter({
   routeTree,
   context: {
-    queryClient: new QueryClient({
-      defaultOptions: {
-        queries: {
-          staleTime: 1000 * 60 * 5, // 5 minutes
-          retry: 1,
-        },
-      },
-    }),
-    // Default values, will be overridden in the App.tsx
+    queryClient,
     isAuthenticated: false,
     role: 'guest',
     isAdmin: false,
     isLoading: true
-  },
+  } satisfies RouterContext,
   defaultPreload: 'intent',
   defaultPreloadDelay: 100,
   defaultErrorComponent: DefaultErrorComponent,

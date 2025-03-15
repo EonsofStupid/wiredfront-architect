@@ -5,7 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Provider as JotaiProvider } from 'jotai';
 import { RouterProvider } from '@tanstack/react-router';
-import { router } from './router';
+import { router, RouterContext } from './router';
 import { useRole } from '@/hooks/useRole';
 import { useUserStore } from '@/stores/useUserStore';
 
@@ -24,14 +24,14 @@ function App() {
   const { role, isAdmin, isLoading } = useRole();
   const { isAuthenticated } = useUserStore();
 
-  // Update the router context with our query client and auth state
-  const routerWithContext = router.withContext({
+  // Create a context object for the router
+  const routerContext: RouterContext = {
     queryClient,
     isAuthenticated,
     role,
     isAdmin,
     isLoading
-  });
+  };
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -39,7 +39,7 @@ function App() {
         <TooltipProvider>
           <Toaster />
           <Sonner />
-          <RouterProvider router={routerWithContext} />
+          <RouterProvider router={router} context={routerContext} />
         </TooltipProvider>
       </JotaiProvider>
     </QueryClientProvider>
