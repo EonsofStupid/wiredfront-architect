@@ -10,10 +10,10 @@
     "allowImportingTsExtensions": true,
     "isolatedModules": true,
     "moduleDetection": "force",
-    "noEmit": true,  // No JS output
+    "emitDeclarationOnly": true,  // Only generate type definitions
 
     /* Linting */
-    "strict": true,  // Enable strict type-checking
+    "strict": true,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "noFallthroughCasesInSwitch": true,
