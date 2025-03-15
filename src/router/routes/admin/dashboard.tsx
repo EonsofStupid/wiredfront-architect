@@ -2,18 +2,15 @@
 import { createFileRoute } from '@tanstack/react-router';
 import AdminDashboard from '@/pages/admin/Dashboard';
 import { toast } from '@/components/ui/use-toast';
-import { RouterContext } from '@/router';
+import { RouterContext } from '@/types/router';
 
 export const Route = createFileRoute('/admin/dashboard')({
   component: AdminDashboard,
-  // Protect this route - require admin role
   beforeLoad: ({ context }: { context: RouterContext }) => {
-    // Skip if still loading auth state
     if (context.isLoading) {
       return {};
     }
     
-    // First check if user is authenticated
     if (!context.isAuthenticated) {
       toast({
         title: "Authentication required",
@@ -21,16 +18,9 @@ export const Route = createFileRoute('/admin/dashboard')({
         variant: "destructive"
       });
       
-      throw context.router.navigate({
-        to: '/',
-        search: {
-          // Optional: Add a redirect param to return after login
-          redirect: '/admin/dashboard'
-        }
-      });
+      throw context.queryClient.clear();
     }
     
-    // Then check if user has admin role
     if (!context.isAdmin) {
       toast({
         title: "Access denied",
@@ -38,9 +28,7 @@ export const Route = createFileRoute('/admin/dashboard')({
         variant: "destructive"
       });
       
-      throw context.router.navigate({
-        to: '/user/overview'
-      });
+      throw context.queryClient.clear();
     }
     
     return {};

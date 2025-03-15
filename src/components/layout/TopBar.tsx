@@ -65,7 +65,8 @@ const TopBar = ({ onMenuClick, onRightPanelClick, rightSidebarVisible }: TopBarP
           <Menu size={20} />
         </button>
         <Link 
-          to="/" 
+          to="/"
+          search={{}}
           className={cn(
             "text-xl font-semibold",
             glassMorphismLevel === 'cyber' ? getNeonTextClass() : "text-gradient"
@@ -135,7 +136,10 @@ const TopBar = ({ onMenuClick, onRightPanelClick, rightSidebarVisible }: TopBarP
             <DropdownMenuItem 
               className="hover-random-effect"
               onClick={() => {
-                router.navigate({ to: '/user/overview' });
+                router.navigate({ 
+                  to: '/user/overview',
+                  search: {}
+                });
               }}
             >
               <LayoutDashboard className="mr-2 h-4 w-4" />
@@ -149,7 +153,10 @@ const TopBar = ({ onMenuClick, onRightPanelClick, rightSidebarVisible }: TopBarP
                 <DropdownMenuItem 
                   className="hover-random-effect"
                   onClick={() => {
-                    router.navigate({ to: '/admin/dashboard' });
+                    router.navigate({ 
+                      to: '/admin/dashboard',
+                      search: {}
+                    });
                   }}
                 >
                   <UserCog className="mr-2 h-4 w-4" />

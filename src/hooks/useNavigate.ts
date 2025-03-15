@@ -1,42 +1,30 @@
 
-import { useRouter } from '@tanstack/react-router';
+import { useRouter, Link } from '@tanstack/react-router';
+import { RoutePath } from '@/types/router';
 
-/**
- * A utility hook for easier navigation in the app
- */
 export function useNavigate() {
   const router = useRouter();
 
   return {
-    /**
-     * Navigate to the given path
-     */
-    to: (path: string, options?: { search?: Record<string, any> }) => {
+    to: (path: RoutePath, options?: { search?: Record<string, any> }) => {
       router.navigate({
-        to: path as any,
-        search: options?.search
+        to: path,
+        search: options?.search || {}
       });
     },
     
-    /**
-     * Navigate back in history
-     */
     back: () => {
       router.history.back();
     },
     
-    /**
-     * Get the current pathname
-     */
     get currentPath() {
-      return router.state.location.pathname;
+      return router.state.location.pathname as RoutePath;
     },
     
-    /**
-     * Check if the current path matches the given path
-     */
-    isActive: (path: string) => {
+    isActive: (path: RoutePath) => {
       return router.state.location.pathname === path;
-    }
+    },
+    
+    Link
   };
 }

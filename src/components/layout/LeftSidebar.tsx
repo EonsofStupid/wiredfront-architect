@@ -1,4 +1,3 @@
-
 import { Home, Layers, Code, Image, MessageCircle, FileText, PlusCircle, Settings, User } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAtomValue } from 'jotai';
@@ -13,6 +12,7 @@ const LeftSidebar = ({ collapsed }: LeftSidebarProps) => {
   const sidebarStyle = useAtomValue(sidebarStyleAtom);
   const neonColor = useAtomValue(neonColorAtom);
   const glassMorphismLevel = useAtomValue(glassMorphismLevelAtom);
+  
   const router = useRouter();
   
   // Get current route to determine which nav item is active
@@ -21,12 +21,7 @@ const LeftSidebar = ({ collapsed }: LeftSidebarProps) => {
   const sidebarItems = [
     { icon: Home, label: 'Dashboard', path: '/', active: pathname === '/' },
     { icon: User, label: 'User Overview', path: '/user/overview', active: pathname === '/user/overview' },
-    { icon: Settings, label: 'Admin Dashboard', path: '/admin/dashboard', active: pathname === '/admin/dashboard' },
-    { icon: Code, label: 'Developer', path: '/developer', active: pathname === '/developer' },
-    { icon: MessageCircle, label: 'AI Chat', path: '/chat', active: pathname === '/chat' },
-    { icon: Layers, label: 'Projects', path: '/projects', active: pathname === '/projects' },
-    { icon: Image, label: 'Gallery', path: '/gallery', active: pathname === '/gallery' },
-    { icon: FileText, label: 'Documents', path: '/documents', active: pathname === '/documents' },
+    { icon: Settings, label: 'Admin Dashboard', path: '/admin/dashboard', active: pathname === '/admin/dashboard' }
   ];
 
   const getSidebarClass = () => {
@@ -95,75 +90,40 @@ const LeftSidebar = ({ collapsed }: LeftSidebarProps) => {
       <div className="h-full flex flex-col py-4">
         <div className="flex-1 overflow-y-auto cyber-scrollbar">
           <nav className="px-2 space-y-2">
-            {sidebarItems.map((item, index) => {
-              // Only render links for routes we've defined
-              const isDefinedRoute = ['/', '/user/overview', '/admin/dashboard'].includes(item.path);
-              
-              if (isDefinedRoute) {
-                return (
-                  <Link
-                    key={index}
-                    to={item.path as any}
-                    className={cn(
-                      "w-full flex items-center rounded-lg py-2 px-3 transition-colors",
-                      "hover:bg-sidebar-accent group relative overflow-hidden hover-random-effect",
-                      item.active ? "bg-sidebar-accent" : "text-sidebar-foreground"
-                    )}
-                  >
-                    <item.icon 
-                      size={20} 
-                      className={cn(
-                        item.active ? "text-accent" : "text-sidebar-foreground/70 group-hover:text-sidebar-foreground",
-                        item.active && getNeonTextClass()
-                      )} 
-                    />
-                    {!collapsed && (
-                      <span className={cn(
-                        "ml-3 text-sm font-medium truncate",
-                        item.active && getNeonTextClass()
-                      )}>
-                        {item.label}
-                      </span>
-                    )}
-                    {item.active && (
-                      <div className={cn(
-                        "absolute left-0 w-1 h-8 bg-accent rounded-r-full",
-                        getNeonBorderClass()
-                      )}></div>
-                    )}
-                  </Link>
-                );
-              } else {
-                // For non-defined routes, render a button instead
-                return (
-                  <button
-                    key={index}
-                    className={cn(
-                      "w-full flex items-center rounded-lg py-2 px-3 transition-colors",
-                      "hover:bg-sidebar-accent group relative overflow-hidden hover-random-effect",
-                      "text-sidebar-foreground/50" // Dimmed appearance for non-functional routes
-                    )}
-                    onClick={() => {
-                      toast({
-                        title: "Coming Soon",
-                        description: `The ${item.label} feature will be available soon.`,
-                        variant: "default"
-                      });
-                    }}
-                  >
-                    <item.icon 
-                      size={20} 
-                      className="text-sidebar-foreground/40 group-hover:text-sidebar-foreground/60"
-                    />
-                    {!collapsed && (
-                      <span className="ml-3 text-sm font-medium truncate">
-                        {item.label}
-                      </span>
-                    )}
-                  </button>
-                );
-              }
-            })}
+            {sidebarItems.map((item, index) => (
+              <Link
+                key={index}
+                to={item.path as '/' | '/user/overview' | '/admin/dashboard'}
+                search={{}}
+                className={cn(
+                  "w-full flex items-center rounded-lg py-2 px-3 transition-colors",
+                  "hover:bg-sidebar-accent group relative overflow-hidden hover-random-effect",
+                  item.active ? "bg-sidebar-accent" : "text-sidebar-foreground"
+                )}
+              >
+                <item.icon 
+                  size={20} 
+                  className={cn(
+                    item.active ? "text-accent" : "text-sidebar-foreground/70 group-hover:text-sidebar-foreground",
+                    item.active && getNeonTextClass()
+                  )} 
+                />
+                {!collapsed && (
+                  <span className={cn(
+                    "ml-3 text-sm font-medium truncate",
+                    item.active && getNeonTextClass()
+                  )}>
+                    {item.label}
+                  </span>
+                )}
+                {item.active && (
+                  <div className={cn(
+                    "absolute left-0 w-1 h-8 bg-accent rounded-r-full",
+                    getNeonBorderClass()
+                  )}></div>
+                )}
+              </Link>
+            ))}
           </nav>
         </div>
         

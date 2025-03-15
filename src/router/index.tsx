@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import { 
   Router,
@@ -9,6 +8,7 @@ import {
 import { routeTree } from './routeTree';
 import { QueryClient } from '@tanstack/react-query';
 import { toast } from '@/components/ui/use-toast';
+import { RouterContext } from '@/types/router';
 
 // Create a default error component with better error handling
 const DefaultErrorComponent = ({ error }: { error: Error }) => {
@@ -36,16 +36,7 @@ const DefaultErrorComponent = ({ error }: { error: Error }) => {
   );
 }
 
-// Define the router context interface
-export interface RouterContext {
-  queryClient: QueryClient;
-  isAuthenticated: boolean;
-  role: string;
-  isAdmin: boolean;
-  isLoading: boolean;
-}
-
-// Create the query client - we'll use this for data fetching
+// Create the query client
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -55,7 +46,7 @@ const queryClient = new QueryClient({
   },
 });
 
-// Create the router instance with proper options
+// Create the router instance
 export const router = createRouter({
   routeTree,
   context: {
@@ -63,16 +54,17 @@ export const router = createRouter({
     isAuthenticated: false,
     role: 'guest',
     isAdmin: false,
-    isLoading: true
+    isLoading: true,
   } satisfies RouterContext,
   defaultPreload: 'intent',
   defaultPreloadDelay: 100,
   defaultErrorComponent: DefaultErrorComponent,
 });
 
-// Register the router for type safety
+// Register router type
 declare module '@tanstack/react-router' {
   interface Register {
     router: typeof router;
+    routeTree: typeof routeTree;
   }
 }
