@@ -5,27 +5,10 @@ import { Route as notFoundRoute } from './routes/not-found';
 import { Route as adminDashboardRoute } from './routes/admin/dashboard';
 import { Route as userOverviewRoute } from './routes/user/overview';
 
-// Organize routes by categories
-const publicRoutes = [
-  indexRoute,
-];
-
-const protectedRoutes = [
-  userOverviewRoute,
-];
-
-const adminRoutes = [
-  adminDashboardRoute,
-];
-
-const utilityRoutes = [
-  notFoundRoute,
-];
-
-// Export the complete route tree
+// Group routes for better organization, TypeScript will infer the correct types
 export const routeTree = rootRoute.addChildren([
-  ...publicRoutes,
-  ...protectedRoutes,
-  ...adminRoutes,
-  ...utilityRoutes,
+  indexRoute,
+  adminDashboardRoute,
+  userOverviewRoute,
+  notFoundRoute,
 ]);

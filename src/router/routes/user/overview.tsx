@@ -2,11 +2,12 @@
 import { createFileRoute, redirect } from '@tanstack/react-router';
 import UserOverview from '@/pages/user/Overview';
 import { toast } from '@/components/ui/use-toast';
+import { RouterContext } from '../__root';
 
 export const Route = createFileRoute('/user/overview')({
   component: UserOverview,
   // Protect this route - require authentication
-  beforeLoad: ({ context }) => {
+  beforeLoad: ({ context }: { context: RouterContext }) => {
     // Skip if still loading auth state
     if (context.isLoading) {
       return {};

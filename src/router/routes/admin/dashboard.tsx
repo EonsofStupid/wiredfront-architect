@@ -2,11 +2,12 @@
 import { createFileRoute, redirect } from '@tanstack/react-router';
 import AdminDashboard from '@/pages/admin/Dashboard';
 import { toast } from '@/components/ui/use-toast';
+import { RouterContext } from '../__root';
 
 export const Route = createFileRoute('/admin/dashboard')({
   component: AdminDashboard,
   // Protect this route - require admin role
-  beforeLoad: ({ context }) => {
+  beforeLoad: ({ context }: { context: RouterContext }) => {
     // Skip if still loading auth state
     if (context.isLoading) {
       return {};
@@ -38,7 +39,8 @@ export const Route = createFileRoute('/admin/dashboard')({
       });
       
       return redirect({
-        to: '/user/overview'
+        to: '/user/overview',
+        search: {}
       });
     }
     

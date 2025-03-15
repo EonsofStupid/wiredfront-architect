@@ -18,10 +18,6 @@ export interface RouterContext {
 
 export const Route = createRootRoute<RouterContext>({
   component: RootComponent,
-  // The loader enables us to provide the router context with the authentication state
-  loader: ({ context }) => {
-    return context;
-  },
 });
 
 function RootComponent() {

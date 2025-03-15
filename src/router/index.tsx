@@ -1,11 +1,12 @@
 
 import React, { useEffect } from 'react';
-import { Router, createRouter } from '@tanstack/react-router';
+import { Router, createRouter, RouterProvider } from '@tanstack/react-router';
 import { routeTree } from './routeTree';
 import { QueryClient } from '@tanstack/react-query';
 import { toast } from '@/components/ui/use-toast';
 import { useRole } from '@/hooks/useRole';
 import { useUserStore } from '@/stores/useUserStore';
+import { RouterContext } from './routes/__root';
 
 // Create a default error component with better error handling
 const DefaultErrorComponent = ({ error }: { error: Error }) => {
@@ -13,8 +14,6 @@ const DefaultErrorComponent = ({ error }: { error: Error }) => {
   
   // Report to error tracking service if needed
   useEffect(() => {
-    // Example: reportError(error);
-    // For now, we'll just show a toast
     toast({
       variant: "destructive",
       title: "Navigation Error",
@@ -36,7 +35,7 @@ const DefaultErrorComponent = ({ error }: { error: Error }) => {
 }
 
 // Create the router instance with proper options
-export const router = createRouter({
+export const router = createRouter<RouterContext>({
   routeTree,
   context: {
     queryClient: new QueryClient({
