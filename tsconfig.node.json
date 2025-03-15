@@ -16,9 +16,7 @@
     "strict": true,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
-    "noFallthroughCasesInSwitch": true,
-
-    "composite": true  // Enable composite for project references
+    "noFallthroughCasesInSwitch": true
   },
   "include": ["vite.config.ts"]
 }
