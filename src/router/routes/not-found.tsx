@@ -1,12 +1,12 @@
 
 import { createFileRoute } from '@tanstack/react-router';
 import NotFound from '@/pages/NotFound';
-import MainLayout from '@/components/layout/MainLayout';
+import RootLayout from '@/layouts/RootLayout';
 
 export const Route = createFileRoute('/*')({
   component: () => (
-    <MainLayout>
+    <RootLayout.Main>
       <NotFound />
-    </MainLayout>
+    </RootLayout.Main>
   )
 });

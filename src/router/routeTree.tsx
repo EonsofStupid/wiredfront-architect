@@ -7,7 +7,7 @@ import { Route as userOverviewRoute } from './routes/user/overview'
 
 export const routeTree = rootRoute.addChildren([
   indexRoute,
-  notFoundRoute,
   adminDashboardRoute,
   userOverviewRoute,
+  notFoundRoute,
 ])

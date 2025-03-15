@@ -1,6 +1,7 @@
 
 import { Outlet, createRootRoute } from '@tanstack/react-router';
 import { QueryClient } from '@tanstack/react-query';
+import RootLayout from '@/layouts/RootLayout';
 
 // Create a properly typed context for our router
 export interface RouterContext {
@@ -8,5 +9,9 @@ export interface RouterContext {
 }
 
 export const Route = createRootRoute<RouterContext>({
-  component: () => <Outlet />
+  component: () => (
+    <RootLayout.Base>
+      <Outlet />
+    </RootLayout.Base>
+  )
 });

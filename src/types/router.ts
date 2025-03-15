@@ -8,8 +8,27 @@ export interface AdminStats {
   responseTime: string;
 }
 
+export interface RouterConfig {
+  routes: {
+    index: {
+      path: '/';
+      layout: 'main';
+    };
+    userOverview: {
+      path: '/user/overview';
+      layout: 'main';
+      auth: true;
+    };
+    adminDashboard: {
+      path: '/admin/dashboard';
+      layout: 'main';
+      auth: true;
+      roles: ['admin'];
+    };
+  };
+}
+
 // These interfaces can be used for type checking within components
-// but we'll avoid using them directly in route definitions
 export interface RouteParams {
   index: Record<string, never>;
   userOverview: Record<string, never>;

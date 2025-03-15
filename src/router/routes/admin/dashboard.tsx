@@ -1,12 +1,12 @@
 
 import { createFileRoute } from '@tanstack/react-router';
 import AdminDashboard from '@/pages/admin/Dashboard';
-import MainLayout from '@/components/layout/MainLayout';
+import RootLayout from '@/layouts/RootLayout';
 
 export const Route = createFileRoute('/admin/dashboard')({
   component: () => (
-    <MainLayout>
+    <RootLayout.Main>
       <AdminDashboard />
-    </MainLayout>
+    </RootLayout.Main>
   )
 });

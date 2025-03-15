@@ -1,4 +1,3 @@
-
 import { Home, Layers, Code, Image, MessageCircle, FileText, PlusCircle, Settings, User } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAtomValue } from 'jotai';
@@ -99,6 +98,8 @@ const LeftSidebar = ({ collapsed }: LeftSidebarProps) => {
               <Link
                 key={index}
                 to={item.path}
+                search={{}}
+                params={{}}
                 className={cn(
                   "w-full flex items-center rounded-lg py-2 px-3 transition-colors",
                   "hover:bg-sidebar-accent group relative overflow-hidden hover-random-effect",

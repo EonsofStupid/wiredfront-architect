@@ -12,7 +12,7 @@ export default defineConfig({
     },
   },
   server: {
-    host: '0.0.0.0',
+    host: true, // Listen on all addresses, not just localhost
     port: 8080,
   },
 })

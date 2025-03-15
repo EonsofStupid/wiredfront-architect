@@ -1,4 +1,3 @@
-
 import { Menu, PanelRightClose, PanelRightOpen, Settings, Bell, Search, User, ChevronDown, LogOut, LayoutDashboard, UserCog } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAtomValue } from 'jotai';
@@ -26,7 +25,6 @@ const TopBar = ({ onMenuClick, onRightPanelClick, rightSidebarVisible }: TopBarP
   const neonColor = useAtomValue(neonColorAtom);
   const { isAdmin, role } = useRole();
 
-  // Get the appropriate glass morphism class
   const getGlassMorphismClass = () => {
     switch (glassMorphismLevel) {
       case 'cyber':
@@ -38,7 +36,6 @@ const TopBar = ({ onMenuClick, onRightPanelClick, rightSidebarVisible }: TopBarP
     }
   };
 
-  // Get neon text class based on selected neon color
   const getNeonTextClass = () => {
     switch (neonColor) {
       case 'purple':
@@ -55,7 +52,7 @@ const TopBar = ({ onMenuClick, onRightPanelClick, rightSidebarVisible }: TopBarP
     <header className={cn(
       "w-full h-14 bg-topbar text-topbar-foreground z-50 flex items-center justify-between px-4",
       getGlassMorphismClass(),
-      "cyber-background-animation" // New class for animations
+      "cyber-background-animation"
     )}>
       <div className="flex items-center space-x-4">
         <button 
@@ -65,10 +62,15 @@ const TopBar = ({ onMenuClick, onRightPanelClick, rightSidebarVisible }: TopBarP
         >
           <Menu size={20} />
         </button>
-        <Link to="/" className={cn(
-          "text-xl font-semibold",
-          glassMorphismLevel === 'cyber' ? getNeonTextClass() : "text-gradient"
-        )}>
+        <Link 
+          to="/" 
+          search={{}} 
+          params={{}}
+          className={cn(
+            "text-xl font-semibold",
+            glassMorphismLevel === 'cyber' ? getNeonTextClass() : "text-gradient"
+          )}
+        >
           WiredFRONT
         </Link>
       </div>
@@ -105,7 +107,6 @@ const TopBar = ({ onMenuClick, onRightPanelClick, rightSidebarVisible }: TopBarP
           {isAdmin && <span className="absolute -top-1 -right-1 w-2 h-2 bg-green-500 rounded-full" />}
         </button>
         
-        {/* User Profile Menu */}
         <DropdownMenu>
           <DropdownMenuTrigger className={cn(
             "flex items-center space-x-1 p-1 rounded-full hover:bg-white/10 transition-colors hover-random-effect",
@@ -121,21 +122,20 @@ const TopBar = ({ onMenuClick, onRightPanelClick, rightSidebarVisible }: TopBarP
             <DropdownMenuSeparator className="bg-white/10" />
             <DropdownMenuItem className="hover-random-effect">
               <User className="mr-2 h-4 w-4" />
-              <Link to="/profile">Profile</Link>
+              <Link to="/profile" search={{}} params={{}}>Profile</Link>
             </DropdownMenuItem>
             <DropdownMenuItem className="hover-random-effect">
               <LayoutDashboard className="mr-2 h-4 w-4" />
-              <Link to="/user/overview">Overview</Link>
+              <Link to="/user/overview" search={{}} params={{}}>Overview</Link>
             </DropdownMenuItem>
             
-            {/* Admin-only menu items */}
             {isAdmin && (
               <>
                 <DropdownMenuSeparator className="bg-white/10" />
                 <DropdownMenuLabel>Administration</DropdownMenuLabel>
                 <DropdownMenuItem className="hover-random-effect">
                   <UserCog className="mr-2 h-4 w-4" />
-                  <Link to="/admin/dashboard">Admin Dashboard</Link>
+                  <Link to="/admin/dashboard" search={{}} params={{}}>Admin Dashboard</Link>
                 </DropdownMenuItem>
               </>
             )}

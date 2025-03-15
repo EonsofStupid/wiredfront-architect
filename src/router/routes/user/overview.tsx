@@ -1,12 +1,12 @@
 
 import { createFileRoute } from '@tanstack/react-router';
 import UserOverview from '@/pages/user/Overview';
-import MainLayout from '@/components/layout/MainLayout';
+import RootLayout from '@/layouts/RootLayout';
 
 export const Route = createFileRoute('/user/overview')({
   component: () => (
-    <MainLayout>
+    <RootLayout.Main>
       <UserOverview />
-    </MainLayout>
+    </RootLayout.Main>
   )
 });
