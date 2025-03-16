@@ -6,10 +6,10 @@ export function useNavigate() {
   const router = useRouter();
 
   return {
-    to: <TTo extends RoutePath>(path: TTo, options?: { search?: Partial<SearchParams[TTo]> }) => {
+    to: <TTo extends RoutePath>(to: TTo, options?: { search?: Partial<SearchParams[TTo]> }) => {
       router.navigate({
-        to: path,
-        search: options?.search || {}
+        to, 
+        search: options?.search
       });
     },
     

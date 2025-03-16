@@ -9,7 +9,7 @@ import {
 import { routeTree } from './routeTree';
 import { QueryClient } from '@tanstack/react-query';
 import { toast } from '@/components/ui/use-toast';
-import { RouterContext } from '@/types/router';
+import { type RouterContext } from '@/types/router';
 
 // Create a default error component with better error handling
 const DefaultErrorComponent = ({ error }: { error: Error }) => {
@@ -68,5 +68,3 @@ declare module '@tanstack/react-router' {
     router: typeof router;
   }
 }
-
-export { RouterContext };

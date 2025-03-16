@@ -93,8 +93,8 @@ const LeftSidebar = ({ collapsed }: LeftSidebarProps) => {
             {sidebarItems.map((item, index) => (
               <Link
                 key={index}
-                to={item.path as '/' | '/user/overview' | '/admin/dashboard'}
-                search={{}}
+                from="/"
+                to={item.path as any}
                 className={cn(
                   "w-full flex items-center rounded-lg py-2 px-3 transition-colors",
                   "hover:bg-sidebar-accent group relative overflow-hidden hover-random-effect",

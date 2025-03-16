@@ -6,7 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Provider as JotaiProvider } from 'jotai';
 import { RouterProvider } from '@tanstack/react-router';
 import { router } from './router';
-import { RouterContext } from './types/router';
+import { type RouterContext } from './types/router';
 import { useRole } from '@/hooks/useRole';
 import { useUserStore } from '@/stores/useUserStore';
 

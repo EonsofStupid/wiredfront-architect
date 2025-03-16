@@ -1,11 +1,11 @@
 
-import { useRouter } from "@tanstack/react-router";
+import { useNavigate } from "@/hooks";
 import { useEffect } from "react";
 import { AlertOctagon, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const NotFound = () => {
-  const router = useRouter();
+  const navigate = useNavigate();
 
   useEffect(() => {
     console.error(
@@ -24,7 +24,7 @@ const NotFound = () => {
         <p className="text-xl text-foreground/80 mb-6">Oops! Page not found</p>
         <Button 
           className="inline-flex items-center py-2 px-4 rounded-lg bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition-colors"
-          onClick={() => router.navigate({ to: '/' })}
+          onClick={() => navigate.to('/')}
         >
           <ArrowLeft size={16} className="mr-2" />
           Return to Dashboard
