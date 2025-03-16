@@ -6,6 +6,9 @@ import { RouterContext } from '@/types/router';
 
 export const Route = createFileRoute('/admin/dashboard')({
   component: AdminDashboard,
+  validateSearch: (search: Record<string, unknown>) => ({
+    view: search.view ? String(search.view) : undefined
+  }),
   beforeLoad: ({ context }: { context: RouterContext }) => {
     if (context.isLoading) {
       return {};

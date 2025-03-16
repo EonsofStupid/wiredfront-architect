@@ -4,10 +4,11 @@ import RootLayout from '@/layouts/RootLayout';
 import { useRole } from '@/hooks/useRole';
 import { useUserStore } from '@/stores/useUserStore';
 import { useEffect } from 'react';
-import { RouterContext } from '@/router';
+import { RouterContext } from '@/types/router';
 
 export const Route = createRootRoute({
   component: RootComponent,
+  validateSearch: (search: Record<string, unknown>) => ({}),
 });
 
 function RootComponent() {

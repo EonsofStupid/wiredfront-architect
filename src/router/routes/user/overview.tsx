@@ -2,10 +2,13 @@
 import { createFileRoute } from '@tanstack/react-router';
 import UserOverview from '@/pages/user/Overview';
 import { toast } from '@/components/ui/use-toast';
-import { RouterContext } from '@/router';
+import { RouterContext } from '@/types/router';
 
 export const Route = createFileRoute('/user/overview')({
   component: UserOverview,
+  validateSearch: (search: Record<string, unknown>) => ({
+    tab: search.tab ? String(search.tab) : undefined
+  }),
   // Protect this route - require authentication
   beforeLoad: ({ context }: { context: RouterContext }) => {
     // Skip if still loading auth state
@@ -21,13 +24,7 @@ export const Route = createFileRoute('/user/overview')({
         variant: "destructive"
       });
       
-      throw context.router.navigate({
-        to: '/',
-        search: {
-          // Optional: Add a redirect param to return after login
-          redirect: '/user/overview'
-        }
-      });
+      throw context.queryClient.clear();
     }
     
     return {};

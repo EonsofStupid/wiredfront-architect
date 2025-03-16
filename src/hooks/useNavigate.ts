@@ -1,12 +1,12 @@
 
 import { useRouter, Link } from '@tanstack/react-router';
-import { RoutePath } from '@/types/router';
+import { RoutePath, SearchParams } from '@/types/router';
 
 export function useNavigate() {
   const router = useRouter();
 
   return {
-    to: (path: RoutePath, options?: { search?: Record<string, any> }) => {
+    to: <TTo extends RoutePath>(path: TTo, options?: { search?: Partial<SearchParams[TTo]> }) => {
       router.navigate({
         to: path,
         search: options?.search || {}

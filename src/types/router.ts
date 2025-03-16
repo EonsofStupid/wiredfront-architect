@@ -2,8 +2,12 @@
 import { User } from '@/types';
 import { QueryClient } from '@tanstack/react-query';
 
-// Define all possible route paths
-export type RoutePath = '/' | '/admin/dashboard' | '/user/overview' | '*';
+// Define all possible route paths with correct nesting
+export type RoutePath = 
+  | '/' 
+  | '/admin/dashboard' 
+  | '/user/overview' 
+  | '*';
 
 // Search parameters for each route
 export interface SearchParams {

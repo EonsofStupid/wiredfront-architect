@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react';
 import { 
   Router,
@@ -65,6 +66,7 @@ export const router = createRouter({
 declare module '@tanstack/react-router' {
   interface Register {
     router: typeof router;
-    routeTree: typeof routeTree;
   }
 }
+
+export { RouterContext };
