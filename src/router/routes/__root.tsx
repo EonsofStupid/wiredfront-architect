@@ -8,7 +8,7 @@ import { type RouterContext } from '@/types/router';
 
 export const Route = createRootRoute({
   component: RootComponent,
-  validateSearch: (search: Record<string, unknown>) => ({}),
+  validateSearch: () => ({}),
 });
 
 function RootComponent() {

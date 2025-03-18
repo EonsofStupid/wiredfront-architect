@@ -1,21 +1,27 @@
 
 import { User } from '@/types';
 import { QueryClient } from '@tanstack/react-query';
+import { type RegisteredRouter, type Registry, type RoutePaths } from '@tanstack/react-router';
 
-// Define all possible route paths with correct nesting
-export type RoutePath = 
-  | '/' 
+export type AppRoutes = 
+  | '/'
   | '/admin/dashboard' 
   | '/user/overview' 
   | '*';
 
 // Search parameters for each route
 export interface SearchParams {
-  '/': Record<string, never>;
+  '/': {}; 
   '/admin/dashboard': { view?: string };
   '/user/overview': { tab?: string };
-  '*': Record<string, never>;
+  '*': {};
 }
+
+// Get route path type with proper typing
+export type RoutePath<T extends AppRoutes = AppRoutes> = T;
+
+// Type for our router instance
+export type AppRouter = RegisteredRouter<Registry<AppRoutes>>;
 
 // Base router context interface
 export interface RouterContext {

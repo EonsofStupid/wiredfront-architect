@@ -1,8 +1,11 @@
+
 import { Home, Layers, Code, Image, MessageCircle, FileText, PlusCircle, Settings, User } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAtomValue } from 'jotai';
 import { sidebarStyleAtom, neonColorAtom, glassMorphismLevelAtom } from '@/atoms';
-import { Link, useRouter } from '@tanstack/react-router';
+import { NavLink, useNavigate } from '@/hooks/useNavigate';
+import { useRouter } from '@tanstack/react-router';
+import { type AppRoutes } from '@/types/router';
 
 interface LeftSidebarProps {
   collapsed: boolean;
@@ -18,7 +21,12 @@ const LeftSidebar = ({ collapsed }: LeftSidebarProps) => {
   // Get current route to determine which nav item is active
   const pathname = router.state.location.pathname;
   
-  const sidebarItems = [
+  const sidebarItems: {
+    icon: React.ElementType;
+    label: string;
+    path: AppRoutes;
+    active: boolean;
+  }[] = [
     { icon: Home, label: 'Dashboard', path: '/', active: pathname === '/' },
     { icon: User, label: 'User Overview', path: '/user/overview', active: pathname === '/user/overview' },
     { icon: Settings, label: 'Admin Dashboard', path: '/admin/dashboard', active: pathname === '/admin/dashboard' }
@@ -91,10 +99,9 @@ const LeftSidebar = ({ collapsed }: LeftSidebarProps) => {
         <div className="flex-1 overflow-y-auto cyber-scrollbar">
           <nav className="px-2 space-y-2">
             {sidebarItems.map((item, index) => (
-              <Link
+              <NavLink
                 key={index}
-                from="/"
-                to={item.path as any}
+                to={item.path}
                 className={cn(
                   "w-full flex items-center rounded-lg py-2 px-3 transition-colors",
                   "hover:bg-sidebar-accent group relative overflow-hidden hover-random-effect",
@@ -122,7 +129,7 @@ const LeftSidebar = ({ collapsed }: LeftSidebarProps) => {
                     getNeonBorderClass()
                   )}></div>
                 )}
-              </Link>
+              </NavLink>
             ))}
           </nav>
         </div>

@@ -4,7 +4,6 @@ import {
   Router,
   createRouter, 
   RouterProvider,
-  redirect
 } from '@tanstack/react-router';
 import { routeTree } from './routeTree';
 import { QueryClient } from '@tanstack/react-query';

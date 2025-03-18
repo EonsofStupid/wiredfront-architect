@@ -4,7 +4,7 @@ import { useAtomValue } from 'jotai';
 import { glassMorphismLevelAtom, neonColorAtom } from '@/atoms';
 import { UserThemeToggle } from '@/components/ui/user-theme-toggle';
 import { useRole } from '@/hooks';
-import { Link, useRouter } from '@tanstack/react-router';
+import { NavLink, useNavigate } from '@/hooks/useNavigate';
 import { toast } from '@/components/ui/use-toast';
 import {
   DropdownMenu,
@@ -25,7 +25,7 @@ const TopBar = ({ onMenuClick, onRightPanelClick, rightSidebarVisible }: TopBarP
   const glassMorphismLevel = useAtomValue(glassMorphismLevelAtom);
   const neonColor = useAtomValue(neonColorAtom);
   const { isAdmin, role } = useRole();
-  const router = useRouter();
+  const navigate = useNavigate();
 
   const getGlassMorphismClass = () => {
     switch (glassMorphismLevel) {
@@ -64,8 +64,7 @@ const TopBar = ({ onMenuClick, onRightPanelClick, rightSidebarVisible }: TopBarP
         >
           <Menu size={20} />
         </button>
-        <Link 
-          from="/"
+        <NavLink 
           to="/"
           className={cn(
             "text-xl font-semibold",
@@ -73,7 +72,7 @@ const TopBar = ({ onMenuClick, onRightPanelClick, rightSidebarVisible }: TopBarP
           )}
         >
           WiredFRONT
-        </Link>
+        </NavLink>
       </div>
       
       <div className="flex-1 max-w-2xl mx-4">
@@ -136,9 +135,7 @@ const TopBar = ({ onMenuClick, onRightPanelClick, rightSidebarVisible }: TopBarP
             <DropdownMenuItem 
               className="hover-random-effect"
               onClick={() => {
-                router.navigate({ 
-                  to: '/user/overview' as any
-                });
+                navigate.to('/user/overview');
               }}
             >
               <LayoutDashboard className="mr-2 h-4 w-4" />
@@ -152,9 +149,7 @@ const TopBar = ({ onMenuClick, onRightPanelClick, rightSidebarVisible }: TopBarP
                 <DropdownMenuItem 
                   className="hover-random-effect"
                   onClick={() => {
-                    router.navigate({ 
-                      to: '/admin/dashboard' as any
-                    });
+                    navigate.to('/admin/dashboard');
                   }}
                 >
                   <UserCog className="mr-2 h-4 w-4" />
